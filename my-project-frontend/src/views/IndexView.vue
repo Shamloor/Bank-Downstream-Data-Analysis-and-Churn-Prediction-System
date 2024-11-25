@@ -2,17 +2,17 @@
   <div>
     <div class="navbar" :style="{ backgroundColor: navbarBg }">
       <div class="logo">APen</div>
-      <el-button @click="scrollTo('home')">Home</el-button>
-      <el-button @click="handleNavigation('userInfo', 'cao')">Visualization</el-button>
-      <el-button @click="handleNavigation('bankRelation', 'cao')">Train</el-button>
-      <el-button @click="handleNavigation('userBehavior', 'cao')">Prediction</el-button>
+      <el-button @click="scrollTo('home')">主页</el-button>
+      <el-button @click="handleNavigation('userInfo', 'cao')">分析可视化</el-button>
+      <el-button @click="handleNavigation('bankRelation', 'cao')">训练模型</el-button>
+      <el-button @click="handleNavigation('userBehavior', 'cao')">预测新数据</el-button>
       <div class="profile-icon" @click="toggleProfilePanel">
-        <img src="./img/个人中心.png" style="max-width: 150%; max-height: 150%; width: auto; height: auto;">
+        <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">
       </div>
     </div>
     <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">
       <div class="profile-content">
-        <img src="./img/壁纸（4）.jpg" alt="User Avatar" class="user-avatar"/>
+        <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>
         <div class="username" id="username-display"></div>
         <div @click="showHelp" class="help-link">Status: Analyzed</div>
         <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>
@@ -22,20 +22,20 @@
       <div id="home1">
         <section id="text">
           <header style="font-size: 14px;">
-            <h1>Welcome to Your</h1>
-            <h1>Bank Churn TEST Hub!</h1>
-            <p style="font-size: 14px;">Explore comprehensive data analysis to understand market trends and customer behavior.</p>
+            <h1>欢迎来到</h1>
+            <h1>银行下游数据分析与预测系统</h1>
+            <p style="font-size: 14px;">探索全面的数据分析以了解市场趋势和客户行为。</p>
           </header>
           <article style="font-size: 14px;">
-            <h2>Key Features</h2>
+            <h2>关键功能</h2>
             <ul>
-              <li>User management and data display</li>
-              <li>Detailed user-bank relationship analysis</li>
-              <li>Predictive insights based on user data</li>
+              <li>实时展示修改日志</li>
+              <li>每日更新下游数据分析结果</li>
+              <li>数据建模与预测趋势</li>
             </ul>
           </article>
             <div class="actions">
-              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('userInfo', 'cao')">Visualization Data Now !</button>
+              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('userInfo', 'cao')">立刻开始全新的可视化！</button>
             </div>
         </section>
         <div class="image-slider">
@@ -321,10 +321,10 @@ onUnmounted(() => {
 });
 
 const images = ref([
-  { src: 'src/views/img/(2).png', alt: 'Description 1' },
-  { src: 'src/views/img/2.jpg', alt: 'Description 2' },
-  { src: 'src/views/img/3.jpg', alt: 'Description 3' },
-  { src: 'src/views/img/4.jpg', alt: 'Description 4' }
+  { src: 'src/views/img/轮播_商业大佬.png', alt: 'Description 1' },
+  { src: 'src/views/img/轮播_银行牌匾.jpg', alt: 'Description 2' },
+  { src: 'src/views/img/轮播_银行入口.jpg', alt: 'Description 3' },
+  { src: 'src/views/img/轮播_古典银行.jpg', alt: 'Description 4' }
 ]);
 
 const currentIndex = ref(0);
