@@ -50,47 +50,41 @@
       </div>
       <div class="marquee" style="margin-top: 60px;">
         <div class="marquee-content">
-          <span v-for="n in 50" :key="n" class="marquee-item">Better Call Apen</span>
+          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>
         </div>
       </div>
     </div>
     <div v-if="dataSetUploaded" id='cao' class="content-section" style="background-color: #1a1a1a; border: 0px;">
       <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
-        <h1>Please first upload your bank's past user records</h1>
+        <h1>请先上传数据集</h1>
       </header>
       <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onUserFileDrop">
         <input type="file" id="xfile" ref="fileInput" @change="handleUserFileUpload" accept=".csv" hidden>
-        <p v-if="!selectedUserFile">Drag a file here or <span class="upload-link" @click="triggerFileInput">select a file</span></p>
+        <p v-if="!selectedUserFile">将文件拖拽进来或 <span class="upload-link" @click="triggerFileInput">选择一个文件</span></p>
         <p v-else>{{ selectedUserFile.name }}</p>
       </div>
       <div class="button" id="ning">
         <button @click="xxxx" :disabled="!selectedUserFile" style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: 100px; margin-top: 50px;">Start Your Visualization!</button>
       </div>
     </div>
+    <!-- 每日数据分析可视化模块 -->
     <div v-if="!dataSetUploaded" id="userInfo" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>
       <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
-        <h1>Visualization Analysis</h1>
+        <h1>数据分析</h1>
         <button style="height: 80%; font-size: 25px; margin-right: 20px; margin-top: 20px;" class="toggle-sidebar-button" @click="toggleSidebar">☰</button>
       </header>
       <div class="sidebar" :style="sidebarStyle">
         <!-- Navigation content -->
         <ul>
-          <li><button class="sidebar-btn" @click="setActiveView('churn')">Customer Churn Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('fen')">Customer Regional Distribution Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('gender')">Customer Gender Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('credit')">Customer Credit Card Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('active')">Customer Active Membership Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('products')">Customer Product Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('tenure')">Customer Account Duration Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('creditScore')">Customer Credit Score Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('age')">Customer Age Distribution Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('balance')">Customer Balance Distribution Analysis</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('salary')">Customer Estimated Salary Distribution Analysis</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('balance_distribution')">客户余额分布</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('churn_rate')">客户流失率</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('feature_distribution')">客户特征分布</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>
         </ul>
       </div>
-      <!-- Customer Churn Analysis -->
-      <div v-if="activeView === 'churn'" class="analysis-block">
+      <!-- 客户余额分布 -->
+      <div v-if="activeView === 'balance_distribution'" class="analysis-block">
         <div class="row">
           <img src="./img/ProgramDVI/df.png" alt="Customer Churn Bar Chart" class="chart" style="background-color: #cfcfcf;">
         </div>
@@ -113,76 +107,36 @@
           </div>
         </div>
       </div>
-
-      <!-- Customer Gender Analysis -->
-      <div v-if="activeView === 'gender'" class="analysis-block">
+      <!-- 客户流失率 -->
+      <div v-if="activeView === 'churn_rate'" class="analysis-block">
         <div class="row">
         <img src="./img/ProgramDVI/df2.png" alt="Customer Gender Bar Chart"  class="chart" style="background-color: #cfcfcf;">
         <img src="./img/ProgramDVI/df2(1).png" alt="Customer Gender Pie Chart" class="chart" style="background-color: #cfcfcf;">
         </div>
       
       </div>
-
-      <!-- Customer Credit Card Analysis -->
-      <div v-if="activeView === 'credit'" class="analysis-block">
+      <!-- 客户特征分布 -->
+      <div v-if="activeView === 'feature_distribution'" class="analysis-block">
         <div class="row">
         <img src="./img/ProgramDVI/df4.png" alt="Customer Credit Card Bar Chart"  class="chart" style="background-color: #cfcfcf;">
         <img src="./img/ProgramDVI/df4(1).png" alt="Customer Credit Card Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
       </div>
-
-      <!-- Customer Active Membership Analysis -->
-      <div v-if="activeView === 'active'" class="analysis-block">
+      <!-- 客户价值细分 -->
+      <div v-if="activeView === 'value_segmentation'" class="analysis-block">
         <div class="row">
         <img src="./img/ProgramDVI/df5.png" alt="Customer Active Membership Bar Chart"  class="chart" style="background-color: #cfcfcf;">
         <img src="./img/ProgramDVI/df5(1).png" alt="Customer Active Membership Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
       </div>
-
-      <!-- Customer Product Analysis -->
-      <div v-if="activeView === 'products'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df6.png" alt="Customer Product Bar Chart"  class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/ProgramDVI/df6(1).png" alt="Customer Product Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
-      </div>
-
-      <!-- Customer Account Duration Analysis -->
-      <div v-if="activeView === 'tenure'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df7.png" alt="Customer Tenure Bar Chart"  class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/ProgramDVI/df7(1).png" alt="Customer Tenure Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
-      </div>
-
-      <!-- Customer Credit Score Analysis -->
-      <div v-if="activeView === 'creditScore'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df8.png" alt="Customer Credit Score Histogram" style="width: 60%;background-color: #cfcfcf;"  class="chart" ></div>
-      </div>
-
-      <!-- Customer Age Distribution Analysis -->
-      <div v-if="activeView === 'age'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df9.png" alt="Customer Age Distribution Histogram" style="width: 60%;background-color: #cfcfcf;"  class="chart"></div>
-      </div>
-
-      <!-- Customer Balance Distribution Analysis -->
-      <div v-if="activeView === 'balance'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df10.png" alt="Customer Balance Distribution Histogram" style="width: 60%;background-color: #cfcfcf;"  class="chart"></div>
-      </div>
-
-      <!-- Customer Estimated Salary Distribution Analysis -->
-      <div v-if="activeView === 'salary'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df11.png" alt="Customer Estimated Salary Distribution Histogram" style="width: 60%;background-color: #cfcfcf;"  class="chart"></div>
-      </div>
-      <div id="worldChart" v-if="activeView === 'fen'" style="background-color: #757575; height: 600px;"></div>
     </div>
+
+    <!-- 模型训练模块 -->
     <div v-if="!dataSetUploaded" id="bankRelation" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
       <header style="margin-top: 70px; margin-left: 20px;">
-        <h1>Model Training</h1>
+        <h1>模型训练</h1>
       </header>
       <div class="button">
-        <button style="font-size: 20px;" @click="downloadMFile()">Start Training</button>
+        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>
       </div>
       <div class="table-container" :key="componentKey1"><table style="width: 100%;">
           <thead>
@@ -202,23 +156,25 @@
         <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">
       </div>
     </div>
+
+    <!-- 用户流失率预测模块 -->
     <div v-if="!dataSetUploaded" id="userBehavior" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
       <header style="margin-top: 70px; margin-left: 20px;">
-        <h1>Upload New Data Prediction</h1>
+        <h1>上传新数据进行预测</h1>
       </header>
       <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onFileDrop">
         <input type="file" id="file" ref="fileInput" @change="handleFileUpload" accept=".csv" hidden>
-        <p v-if="!selectedFile">Drag a file here or <span class="upload-link" @click="triggerXFileInput">select a file</span></p>
+        <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>
         <p v-else>{{ selectedFile.name }}</p>
       </div>
       <div class="button" style="margin-left: 42%;">
-        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">Upload</button>
-        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">Start</button>
-        <button @click="go" :disabled="!selectedFile" style="border: 0px;">Download</button>
+        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>
+        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
+        <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>
       </div>
       <div class="display-data">
-        <h3 style="margin: 0px;">File Preview:</h3>
+        <h3 style="margin: 0px;">文件预览: </h3>
         <div class="file-preview-container" style="height: 300px;" :key="componentKey">
           <table>
             <thead>
@@ -237,7 +193,7 @@
     </div>
 
     <footer class="footer">
-      Produced by Living on the Edge | Contact: <a href="mailto:2821891910@qq.com">2821891910@qq.com</a>
+      Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>
     </footer>
   </div>
 </template>
