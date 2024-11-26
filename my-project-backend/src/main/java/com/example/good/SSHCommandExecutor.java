@@ -9,8 +9,8 @@ public class SSHCommandExecutor {
 
     public static String sshcll(String command) // 要执行的CMD命令
     {
-        String host = "192.168.8.128"; // 远程主机IP地址
-        String user = "willson";   // SSH登录用户名
+        String host = "niit01"; // 远程主机IP地址
+        String user = "niit";   // SSH登录用户名
         String password = "123456"; // SSH登录密码
 
         try {
@@ -57,10 +57,10 @@ public class SSHCommandExecutor {
     }
 
     public static void main(String[] args) {
-        String host = "192.168.8.128"; // 远程主机IP地址
-        String user = "willson";   // SSH登录用户名
+        String host = "niit01"; // 远程主机IP地址
+        String user = "niit";   // SSH登录用户名
         String password = "123456"; // SSH登录密码
-        String command = "ls -l";  // 要执行的CMD命令
+        String command = "echo hello";  // 要执行的CMD命令
 
         try {
             JSch jsch = new JSch();

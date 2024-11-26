@@ -9,7 +9,7 @@ import java.nio.file.*;
 @Service
 public class FileService {
 
-    private final Path rootLocation = Paths.get("D:/VSCode/SpringBoot-Vue-Template-Jwt-main/my-project-frontend/src/views/img");
+    private final Path rootLocation = Paths.get("D:/Programming/Front-End-Modified/my-project-frontend/src/views/files");
 
     public FileService() {
         try {

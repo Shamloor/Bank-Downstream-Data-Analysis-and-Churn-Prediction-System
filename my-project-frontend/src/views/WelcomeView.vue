@@ -1,11 +1,11 @@
 <template>
     <div style="width: 100vw;height: 100vh;overflow: hidden;display: flex">
         <div style="flex: 1">
-            <el-image style="width: 100%;height: 100%" fit="cover"
-                      src="https://cdn.pixabay.com/photo/2020/08/09/14/25/business-5475658_1280.jpg"/>
+            <img style="width: 100%;height: 100%" fit="cover"
+                      src="src/views/img/登入前.jpg"/>
         </div>
         <div class="welcome-title">
-            <div style="font-size: 30px;font-weight: bold">Welcome to our bank account churn analysis platform</div>
+            <div style="font-size: 30px;font-weight: bold">欢迎来到银行下游数据分析和预测平台</div>
             <div style="margin-top: 10px"></div>
             <div style="margin-top: 5px"></div>
         </div>

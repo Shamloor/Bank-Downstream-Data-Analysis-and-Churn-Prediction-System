@@ -30,38 +30,6 @@ public class SSHController {
         return ResponseEntity.ok(
                 messageHandle(() -> {
                     sshService.sshcll(command);
-                    List<String> fileNames = List.of(
-                            "countplots.png",
-                            "df7.png",
-                            "train_age.png",
-                            "train_balance.png",
-                            "train_creditscore.png",
-                            "train_estimatedsalary.png",
-                            "train_exited(1).png",
-                            "train_exited.png",
-                            "train_gender(1).png",
-                            "train_gender.png",
-                            "train_geography(1).png",
-                            "train_geography.png",
-                            "train_hascrcard(1).png",
-                            "train_hascrcard.png",
-                            "train_isactivemember(1).png",
-                            "train_isactivemember.png",
-                            "train_numofproducts(1).png",
-                            "train_numofproducts.png",
-                            "train_tenure(1).png",
-                            "train_tenure.png"
-                    );
-                    String remoteDirectory = "/home/willson/training/shell/visual/";
-                    String localDirectory = "D:/VSCode/SpringBoot-Vue-Template-Jwt-main/my-project-frontend/src/views/img/xx";
-
-                    try {
-                        sshService.downloadFiles(fileNames, remoteDirectory, localDirectory);
-                    } catch (JSchException e) {
-                        throw new RuntimeException(e);
-                    } catch (SftpException e) {
-                        throw new RuntimeException(e);
-                    }
                     return "Training successfully!";  // 返回成功的消息
                 })
         );
@@ -78,11 +46,11 @@ public class SSHController {
     public ResponseEntity<RestBean<String>> executeSSHPredict(@PathVariable String filename) {
         return ResponseEntity.ok(
                 messageHandle(() -> {
-                    sshService.sshcll("cd training/shell/spark/ && ./model_training.sh");
+                    sshService.sshcll("model_training.sh");
                     System.out.println("good....................................................................................................");
                     List<String> fileNames = List.of("merged_evaluation.csv", "roc_curve.png", "feature_importances.png");
-                    String remoteDirectory = "/home/willson/training/shell/spark/";
-                    String localDirectory = "D:/VSCode/SpringBoot-Vue-Template-Jwt-main/my-project-frontend/src/views/img";
+                    String remoteDirectory = "/home/niit/bin";
+                    String localDirectory = "D:/Programming/Front-End-Modified/my-project-frontend/src/views/img";
 
                     try {
                         sshService.downloadFiles(fileNames, remoteDirectory, localDirectory);
@@ -95,6 +63,7 @@ public class SSHController {
                 })  // 返回文件内容
         );
     }
+
     private <T> RestBean<T> messageHandle(Supplier<T> action) {
         try {
             T result = action.get();

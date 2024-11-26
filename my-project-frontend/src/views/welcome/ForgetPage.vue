@@ -9,8 +9,8 @@
         <transition name="el-fade-in-linear" mode="out-in">
             <div style="text-align: center;margin: 0 20px;height: 100%" v-if="active === 0">
                 <div style="margin-top: 80px">
-                    <div style="font-size: 25px;font-weight: bold">Reset your password</div>
-                    <div style="font-size: 14px;color: grey">Please enter the email address where you want to reset your password</div>
+                    <div style="font-size: 25px;font-weight: bold">重置密码</div>
+                    <div style="font-size: 14px;color: grey">请输入账号所绑定的邮箱</div>
                 </div>
                 <div style="margin-top: 50px">
                     <el-form :model="form" :rules="rules" @validate="onValidate" ref="formRef">

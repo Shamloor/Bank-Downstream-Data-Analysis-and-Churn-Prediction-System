@@ -23,11 +23,22 @@ public class MysqlController {
     @Autowired
     private MysqlService mysqlService;
 
-    @GetMapping("/table/{tablename:.+}")
-    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String tablename) {
+//    @GetMapping("/table/{tablename:.+}")
+//    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String tablename) {
+//        return ResponseEntity.ok(
+//                messageHandle(() -> mysqlService.queryTable(tablename))  // 返回文件内容
+//        );}
+
+    @PostMapping("/query-charts")
+    public ResponseEntity<RestBean<Map<String, List<Map<String, Object>>>>> queryAllCharts() {
         return ResponseEntity.ok(
-                messageHandle(() -> mysqlService.queryTable(tablename))  // 返回文件内容
-        );}
+                messageHandle(() -> {
+                    // 查询四个表的数据
+                    Map<String, List<Map<String, Object>>> allData = mysqlService.queryAllTablesData();
+                    return allData; // 返回所有表的数据
+                })
+        );
+    }
 
     private <T> RestBean<T> messageHandle(Supplier<T> action) {
         try {

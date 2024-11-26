@@ -3,9 +3,10 @@
     <div class="navbar" :style="{ backgroundColor: navbarBg }">
       <div class="logo">APen</div>
       <el-button @click="scrollTo('home')">主页</el-button>
-      <el-button @click="handleNavigation('userInfo', 'cao')">分析可视化</el-button>
-      <el-button @click="handleNavigation('bankRelation', 'cao')">训练模型</el-button>
-      <el-button @click="handleNavigation('userBehavior', 'cao')">预测新数据</el-button>
+      <el-button @click="handleNavigation('RealTimeDisplay', 'cao')">实时修改日志</el-button>
+      <el-button @click="handleNavigation('DataAnalysis', 'cao')">分析可视化</el-button>
+      <el-button @click="handleNavigation('ModelTraining', 'cao')">训练模型</el-button>
+      <el-button @click="handleNavigation('NewDataPrediction', 'cao')">预测新数据</el-button>
       <div class="profile-icon" @click="toggleProfilePanel">
         <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">
       </div>
@@ -35,7 +36,7 @@
             </ul>
           </article>
             <div class="actions">
-              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('userInfo', 'cao')">立刻开始全新的可视化！</button>
+              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>
             </div>
         </section>
         <div class="image-slider">
@@ -67,8 +68,9 @@
         <button @click="xxxx" :disabled="!selectedUserFile" style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: 100px; margin-top: 50px;">Start Your Visualization!</button>
       </div>
     </div>
+
     <!-- 每日数据分析可视化模块 -->
-    <div v-if="!dataSetUploaded" id="userInfo" class="content-section">
+    <div v-if="!dataSetUploaded" id="DataAnalysis" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>
       <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
         <h1>数据分析</h1>
@@ -83,54 +85,27 @@
           <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>
         </ul>
       </div>
+
       <!-- 客户余额分布 -->
       <div v-if="activeView === 'balance_distribution'" class="analysis-block">
-        <div class="row">
-          <img src="./img/ProgramDVI/df.png" alt="Customer Churn Bar Chart" class="chart" style="background-color: #cfcfcf;">
-        </div>
-        <div class="row">
-          <img src="./img/ProgramDVI/df1(1).png" alt="Customer Churn Pie Chart" class="chart" style="background-color: #cfcfcf;">
-          <div class="table-container">
-            <p style="">dataset format</p>
-            <table>
-            <thead>
-              <tr>
-                <th v-for="(header, index) in tablesx.train.headers.value" :key="'header-' + index">{{ header }}</th>
-              </tr>
-            </thead>
-            <tbody style="background-color: #cfcfcf; color: black;;">
-              <tr v-for="(row, index) in tablesx.train.processedData.value" :key="'row-' + index">
-                <td v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-        </div>
+        <div id="balanceChart" class="chart" style="width: 100%; height: 400px;"></div>
       </div>
       <!-- 客户流失率 -->
       <div v-if="activeView === 'churn_rate'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df2.png" alt="Customer Gender Bar Chart"  class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/ProgramDVI/df2(1).png" alt="Customer Gender Pie Chart" class="chart" style="background-color: #cfcfcf;">
-        </div>
-      
+        <div id="churnChart" class="chart" style="width: 100%; height: 400px;"></div>
       </div>
       <!-- 客户特征分布 -->
       <div v-if="activeView === 'feature_distribution'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df4.png" alt="Customer Credit Card Bar Chart"  class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/ProgramDVI/df4(1).png" alt="Customer Credit Card Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
+        <div id="featureChart" class="chart" style="width: 100%; height: 400px;"></div>
       </div>
       <!-- 客户价值细分 -->
       <div v-if="activeView === 'value_segmentation'" class="analysis-block">
-        <div class="row">
-        <img src="./img/ProgramDVI/df5.png" alt="Customer Active Membership Bar Chart"  class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/ProgramDVI/df5(1).png" alt="Customer Active Membership Pie Chart" class="chart" style="background-color: #cfcfcf;"></div>
+        <div id="valueChart" class="chart" style="width: 100%; height: 400px;"></div>
       </div>
     </div>
 
     <!-- 模型训练模块 -->
-    <div v-if="!dataSetUploaded" id="bankRelation" class="content-section">
+    <div v-if="!dataSetUploaded" id="ModelTraining" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
       <header style="margin-top: 70px; margin-left: 20px;">
         <h1>模型训练</h1>
@@ -158,7 +133,7 @@
     </div>
 
     <!-- 用户流失率预测模块 -->
-    <div v-if="!dataSetUploaded" id="userBehavior" class="content-section">
+    <div v-if="!dataSetUploaded" id="NewDataPrediction" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
       <header style="margin-top: 70px; margin-left: 20px;">
         <h1>上传新数据进行预测</h1>
@@ -199,16 +174,52 @@
 </template>
 
 <script setup>
-// main.ts
-
-// If you are using CDN to import, please delete the line below.
-import { logout } from '@/net'
+import { logout } from '@/net';
 import router from "@/router";
-import { ref, onMounted, onUnmounted, nextTick} from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import * as echarts from 'echarts';
+import worldMapData from 'echarts/map/json/world.json';
+import { ElMessage, ElLoading } from 'element-plus';
+import { get, post } from "@/net";
+import axios from 'axios';
+
 
 const showProfilePanel = ref(false);
 const profilePanelStyle = ref({right: '-300px'});  // Control panel style
+const activeSection = ref('home');  // Initial active section value
+const navbarBg = ref('#1a1a1a');  // Set initial color based on the initial active section
+const currentIndex = ref(0);
+const startX = ref(0);
+const threshold = 50;
+const images = ref([
+  { src: 'src/views/img/轮播_商业大佬.png', alt: '轮播_商业大佬' },
+  { src: 'src/views/img/轮播_银行牌匾.jpg', alt: '轮播_银行牌匾' },
+  { src: 'src/views/img/轮播_银行入口.jpg', alt: '轮播_银行入口' },
+  { src: 'src/views/img/轮播_古典银行.jpg', alt: '轮播_古典银行' }
+]);
+let autoScrollInterval = null;
+const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
+const activeView = ref('balance_distribution'); // Currently Active View
+const chartData = ref({}); // All data from backend
+const selectedFile = ref(null);
+const selectedUserFile = ref(null);
+const previewData = ref([]);
+let headers = ref(null);
+let good = ref(null);
+let previewData1 = ref([]);
+let processedData = ref([]);
+let filename = ref(null);
+let mheaders = ref(null);
+let mpreviewData1 = ref([]);
+let mprocessedData = ref([]);
+const componentKey = ref(0);
+const componentKey1 = ref(0);
+const componentKey2 = ref(0);
+const componentKey3 = ref(0);
+let dataSetUploaded = ref(false);
 
+
+// User profile panel
 function toggleProfilePanel() {
   if (showProfilePanel.value) {
     profilePanelStyle.value.right = '-300px';  // Hide panel
@@ -217,10 +228,6 @@ function toggleProfilePanel() {
   }
   showProfilePanel.value = !showProfilePanel.value;
 }
-
-const activeSection = ref('home');  // Initial active section value
-
-const navbarBg = ref('#1a1a1a');  // Set initial color based on the initial active section
 
 function userLogout() {
   logout(() => router.push("/"))
@@ -237,13 +244,16 @@ function scrollTo(elementId) {
 
 function updateNavbarColor(section) {
   switch (section) {
-    case 'userBehavior':
+    case 'NewDataPrediction':
+      navbarBg.value = '#5a5a5a';
+      break;
+    case 'ModelTraining':
       navbarBg.value = '#4a4a4a';
       break;
-    case 'bankRelation':
+    case 'DataAnalysis':
       navbarBg.value = '#3a3a3a';
       break;
-    case 'userInfo':
+    case 'RealTimeDisplay':
       navbarBg.value = '#2a2a2a';
       break;
     default:
@@ -255,9 +265,10 @@ function handleScroll() {
   const scrollY = window.scrollY + window.innerHeight / 2;  // Consider the midpoint position
   const sections = {
     home: document.getElementById('home').offsetTop,
-    userInfo: document.getElementById('userInfo').offsetTop,
-    bankRelation: document.getElementById('bankRelation').offsetTop,
-    userBehavior: document.getElementById('userBehavior').offsetTop
+    RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
+    DataAnalysis: document.getElementById('DataAnalysis').offsetTop,
+    ModelTraining: document.getElementById('ModelTraining').offsetTop,
+    NewDataPrediction: document.getElementById('NewDataPrediction').offsetTop
   };
 
   for (const section of Object.keys(sections).reverse()) {
@@ -270,22 +281,6 @@ function handleScroll() {
     }
   }
 }
-
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
-const images = ref([
-  { src: 'src/views/img/轮播_商业大佬.png', alt: 'Description 1' },
-  { src: 'src/views/img/轮播_银行牌匾.jpg', alt: 'Description 2' },
-  { src: 'src/views/img/轮播_银行入口.jpg', alt: 'Description 3' },
-  { src: 'src/views/img/轮播_古典银行.jpg', alt: 'Description 4' }
-]);
-
-const currentIndex = ref(0);
-const startX = ref(0);
-const threshold = 50;
 
 function startTouch(e) {
   startX.value = e.touches[0].clientX;
@@ -311,10 +306,6 @@ function next() {
 function prev() {
   currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
 }
-
-import * as echarts from 'echarts';
-import worldMapData from 'echarts/map/json/world.json'; // Make sure you have the correct path and world map data
-
 
 function initWorldMap(chart) {
   const userData = ref(tablesx.train_geography.processedData.value.map(data => ({
@@ -378,8 +369,6 @@ function xx() {
   initWorldMap(chart);
 }
 
-let autoScrollInterval = null;
-
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   checkDataSetStatus();
@@ -391,17 +380,14 @@ onMounted(() => {
 
   if (sessionStorage.getItem('uploadSuccess') === 'true') {
     // Delay for a while to show the message, to ensure the page has finished loading
-    ElMessage.success('Your data upload was successful! Enjoy your analysis!');
+    ElMessage.success('上传成功');
       // Clear the status to prevent repeated display of the message on refresh
       sessionStorage.removeItem('uploadSuccess');
   }
 
   autoScrollInterval = setInterval(next, 3000)
 
-  
 });
-
-const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
 
 function toggleSidebar() {
   if (sidebarStyle.value.left === '0px') {
@@ -411,20 +397,12 @@ function toggleSidebar() {
   }
 }
 
-const activeView = ref('churn');  // Manage the current view variable
-
 function setActiveView(view) {
   activeView.value = view;
   nextTick(() => {
     xx();  // Assuming initMap is the function to initialize the map
   });
 }
-
-import { ElMessage } from 'element-plus';
-
-const selectedFile = ref(null);
-const selectedUserFile = ref(null);
-const previewData = ref([]);
 
 // Trigger file selection
 function triggerFileInput() {
@@ -449,14 +427,13 @@ function onUserFileDrop(event) {
   handleUserFileUpload(event);
 }
 
-
 // Handle file upload selection
 function handleFileUpload(event) {
   const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
   const file = files[0];
   console.log(file);
   if (!file.name.endsWith('.csv')) {
-    ElMessage.error('Only CSV files can be uploaded!');
+    ElMessage.error('只能上传CSV格式文件! ');
     return;
   }
   selectedFile.value = file;
@@ -466,22 +443,17 @@ function handleUserFileUpload(event) {
   const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
   const file = files[0];
   if (!file.name.endsWith('.csv')) {
-    ElMessage.error('Only CSV files can be uploaded!');
+    ElMessage.error('只能上传CSV格式文件! ');
     return;
   }
   selectedUserFile.value = file;
 }
 
-import {get, post} from "@/net";
-
-// Command run statement
-import { ElLoading} from 'element-plus'
-
 // Wrap a new post method to add loading indicator and error handling
 function enhancedPost(url, formData, onSuccess) {
   const loadingInstance = ElLoading.service({
     lock: true,
-    text: 'Processing, please wait...',
+    text: '执行中, 请耐心等待...',
     background: 'rgba(0, 0, 0, 0.7)'
   });
 
@@ -522,15 +494,16 @@ function uploadFile() {
 
 }
 
-function xxxx()
-{
+// Execute all shell scripts
+function xxxx() {
   uploadUserFile()
   sshcommand("training/shell/exec_visual.sh");
 }
+
 function uploadUserFile() {
   const loadingInstance11 = ElLoading.service({
     lock: true,
-    text: 'Processing, please wait...',
+    text: '处理中, 请等待...',
     background: 'rgba(0, 0, 0, 0.7)'
   });
   const formData = new FormData();
@@ -540,14 +513,7 @@ function uploadUserFile() {
   , () => {
     sessionStorage.setItem('uploadSuccess', 'true');
             });
-
 }
-
-let headers = ref(null);
-let good = ref(null);
-let previewData1 = ref([]);
-let processedData = ref([]);
-let filename = ref(null)
 
 // Download file and preview
 function downloadFile() {
@@ -606,8 +572,8 @@ function downloadFile() {
 
 }
 
-function go()
-{
+// Generates a file from the given data and triggers its download as "predictions.csv".
+function go() {
   console.log(good)
   const url = window.URL.createObjectURL(new Blob([good]));
   const link = document.createElement('a');
@@ -615,14 +581,11 @@ function go()
   link.setAttribute('download', 'predictions.csv');  // Set the filename
   document.body.appendChild(link);
   link.click();
-  ElMessage.success('File downloaded successfully!');
+  ElMessage.success('成功下载');
   componentKey.value++;
 }
-let mheaders = ref(null);
-let mpreviewData1 = ref([]);
-let mprocessedData = ref([]);
-const defaultImagePath = './img/saul.jpg';
 
+// Fetches a file via GET request, processes its data for preview, and updates the UI with parsed results.
 function downloadMFile() {
   const loadingInstance = ElLoading.service({
           lock: true,
@@ -652,13 +615,6 @@ function downloadMFile() {
 
 }
 
-const componentKey = ref(0);
-const componentKey1 = ref(0);
-const componentKey2 = ref(0);
-const componentKey3 = ref(0);
-
-let dataSetUploaded = ref(false);
-
 function checkDataSetStatus() {
   try {
     const username = sessionStorage.getItem('username');
@@ -670,7 +626,7 @@ function checkDataSetStatus() {
 
     const message1 = username + '.csv';
 
-    get(`/api/ssh/status/${message1}`, 
+    get(`/api/ssh/status/${message1}`,
     (data) => {
         console.log(data)
         if (data.includes('Error: File does not exist at path'))
@@ -682,7 +638,7 @@ function checkDataSetStatus() {
         {
           dataSetUploaded.value = false;
         }
-    }, 
+    },
     undefined,  // No intermediate processing function defined here
     (message) => {
         ElMessage.warning(`Download failed: ${message}`);
@@ -694,7 +650,6 @@ function checkDataSetStatus() {
   }
 }
 
-
 function handleNavigation(defaultId, alternateId) {
     if (dataSetUploaded.value) {
         scrollTo(alternateId);
@@ -704,96 +659,47 @@ function handleNavigation(defaultId, alternateId) {
     }
 }
 
-const tablesx = {
-  train: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_age: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_balance: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_creditscore: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_estimatedsalary: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_exited: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_gender: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_geography: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_hascrcard: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_isactivemember: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_numofproducts: {
-    headers: ref([]),
-    processedData: ref([])
-  },
-  train_tenure: {
-    headers: ref([]),
-    processedData: ref([])
-  }
-};
-
-function fenmysql() {
-
-const tables = [
-  'train', 
-  'train_age', 
-  'train_balance', 
-  'train_creditscore', 
-  'train_estimatedsalary', 
-  'train_exited', 
-  'train_gender', 
-  'train_geography', 
-  'train_hascrcard', 
-  'train_isactivemember', 
-  'train_numofproducts', 
-  'train_tenure'
-];
-
-tables.forEach(table => {
-  get(`/api/mysql/table/${table}`, 
-    (data) => {
-      const lines = data.split('\n');
-      const previewData2 = lines.slice(0, Math.min(10, lines.length));
-      console.log(previewData2);
-      tablesx[table].headers.value = previewData2[0].split(',').map(header => header.trim());
-      tablesx[table].processedData.value = previewData2.slice(1, 101).map(line =>
-        line.split(',').map(value => value.trim())
-      );
-      console.log(tablesx[table].processedData.value)
-    }, 
-    undefined,  // No intermediate processing function defined here
-    (message) => {
-      ElMessage.warning(`Table ${table} download failed: ${message}`);
-      coldTime.value = 0;  // Adjust or remove as needed
-    }
-  );
-});
-console.log(tablesx.train_geography.headers.value);
-
+function fetchChartData() {
+  axios.post('/api/mysql/query-charts')
+      .then((response) => {
+        chartData.value = response.data.data; // 存储后端返回的数据
+        renderChart(activeView.value); // 渲染初始视图
+      })
+      .catch((error) => {
+        console.error('Failed to fetch chart data:', error);
+      });
 }
+
+function renderChart(view) {
+  let chartDom;
+  let option;
+
+  if (view === 'balance_distribution') {
+    chartDom = document.getElementById('balanceChart');
+    const data = chartData.value.ads_customer_balance_distribution || [];
+    option = {
+      title: { text: '客户余额分布' },
+      tooltip: {},
+      xAxis: { type: 'category', data: data.map((item) => item.BalanceRange) },
+      yAxis: { type: 'value' },
+      series: [{ name: '客户数量', type: 'bar', data: data.map((item) => item.CustomerCount) }],
+    };
+  }
+
+  if (chartDom && option) {
+    const chart = echarts.init(chartDom);
+    chart.setOption(option);
+  }
+}
+
+onMounted(() => {
+  fetchChartData(); // 在组件挂载时加载数据
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
 </script>
 
 
@@ -893,7 +799,7 @@ body {
   background-color: #000000;
   transition: right 0.5s ease-in-out; /* Smooth sliding effect */
   z-index: 1009;
-  border: 1px solid #c0c0c0; 
+  border: 1px solid #c0c0c0;
   display: flex;
   flex-direction: column; /* Vertical layout */
   align-items: center; /* Center alignment */
@@ -921,9 +827,10 @@ body {
 }
 
 #home { background-color: #1a1a1a; }
-#userInfo { background-color: #2a2a2a; }
-#bankRelation { background-color: #3a3a3a; }
-#userBehavior { background-color: #4a4a4a; }
+#RealTimeDisplay {background-color: #2a2a2a; }
+#DataAnalysis { background-color: #3a3a3a; }
+#ModelTraining { background-color: #4a4a4a; }
+#NewDataPrediction { background-color: #5a5a5a; }
 
 @keyframes blink {
   from { color: #d6c7c7; }
@@ -1077,38 +984,38 @@ ul {
   }
 }
 
-#userInfo {
+#DataAnalysis {
   margin: auto;
   flex-direction: column;
 }
 
-#bankRelation {
+#ModelTraining {
   margin: auto;
   flex-direction: column;
 }
 
-#bankRelation .button {
+#ModelTraining .button {
   margin-left: 47%;
   margin-bottom: 0px;
 }
-#bankRelation button {
+#ModelTraining button {
   margin: 5px;
   padding: 10px 15px;
   cursor: pointer;
   border: 1px solid #666666;
 }
-#bankRelation button:hover
+#ModelTraining button:hover
 {
   border: 1px solid #ffd900;
 }
 
-#bankRelation .results-container {
+#ModelTraining .results-container {
     display: flex;
     margin-top: 20px;
     border: 2px dashed #666666;
 }
 
-#bankRelation .results-table {
+#ModelTraining .results-table {
     flex: 1;
     padding-right: 20px;
     margin-top: 80px;
@@ -1117,31 +1024,31 @@ ul {
     margin-left: 40px;
 }
 
-#bankRelation .results-chart {
+#ModelTraining .results-chart {
     flex: 2;
     margin-left: -200px;
     margin-top: 40px
 }
 
-#bankRelation table {
+#ModelTraining table {
     width: 200px;
     border-collapse: collapse;
 }
 
-#bankRelation th, td {
+#ModelTraining th, td {
     border: 1px solid #ffd900;
     padding: 8px;
     text-align: left;
 }
 
-#bankRelation th {
+#ModelTraining th {
     background-color: #666666;
 }
 
-#userBehavior{
+#NewDataPrediction{
   flex-direction: column;
 }
-#userBehavior .upload-area {
+#NewDataPrediction .upload-area {
   border: 2px dashed #ffd900;
   padding: 20px;
   text-align: center;
@@ -1153,35 +1060,35 @@ ul {
   margin-left: 30%;
 }
 
-#userBehavior .upload-area:hover {
+#NewDataPrediction .upload-area:hover {
   background-color: #757575;
 }
 
-#userBehavior .upload-link {
+#NewDataPrediction .upload-link {
   color: blue;
   cursor: pointer;
   text-decoration: underline;
 }
 
-#userBehavior .display-data {
+#NewDataPrediction .display-data {
   margin: 20px;
 }
 
-#userBehavior .button {
+#NewDataPrediction .button {
   margin-left: 30%;
   margin-bottom: 0px;
 }
-#userBehavior button {
+#NewDataPrediction button {
   margin: 5px;
   padding: 10px 15px;
   cursor: pointer;
 }
-#userBehavior button:hover
+#NewDataPrediction button:hover
 {
   border: 1px #ffd900;
 }
 
-#userBehavior input[type="file"] {
+#NewDataPrediction input[type="file"] {
   margin-bottom: 10px;
 }
 
@@ -1228,41 +1135,41 @@ ul {
   border: 1px #ffd900;
 }
 
-#userBehavior input[type="file"] {
+#NewDataPrediction input[type="file"] {
   margin-bottom: 10px;
 }
 
 
 .sidebar {
   position: fixed;
-  left: -270px;  
+  left: -270px;
   top: 350px;
   bottom: 0;
   width: 250px;
   height: 300px;
   background-color: #333;
-  transition: left 0.3s;  
+  transition: left 0.3s;
   z-index: 1002;
   opacity: 80%;
   overflow-y: auto;
-  padding: 10px;  
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);  
+  padding: 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar ul {
-  list-style-type: none;  
+  list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
 .sidebar-btn {
-  width: 100%;  
+  width: 100%;
   padding: 10px;
-  border: 1px solid #555;  
+  border: 1px solid #555;
   background-color: #444;
   color: white;
-  text-align: left;  
-  margin-bottom: 5px;  
+  text-align: left;
+  margin-bottom: 5px;
   transition: background-color 0.3s;
   cursor: pointer;
 }
@@ -1318,7 +1225,7 @@ ul {
 }
 
 .sidebar-btn:hover {
-  background-color: #555;  
+  background-color: #555;
 }
 
 .toggle-sidebar-button:hover {
@@ -1379,3 +1286,4 @@ ul {
 }
 th {text-align: center;}
 </style>
+

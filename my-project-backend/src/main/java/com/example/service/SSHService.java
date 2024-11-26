@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class SSHService {
-    String host = "192.168.8.128";
-    String user = "willson";
+    String host = "niit01";
+    String user = "niit";
     String password = "123456";
     public String sshcll(String command) {
 
@@ -52,7 +52,7 @@ public class SSHService {
 
     public String statuscll(String fileName) {
         long waitTimeMillis = 20000;
-        String filePath = "/home/willson/training/user_dataqset/" + fileName;  // 修改为你的具体路径
+        String filePath = "/home/niit/upload/" + fileName;  // 修改为你的具体路径
 
         try {
             JSch jsch = new JSch();
@@ -94,7 +94,7 @@ public class SSHService {
     }
 
     public void uploadToRemote(MultipartFile file, String userId){
-        String filePath = "/home/willson/training/user_dataqset";
+        String filePath = "/home/niit/upload/";
 
         try {
             JSch jsch = new JSch();
@@ -161,7 +161,6 @@ public class SSHService {
 
     public static void main(String[] args) {
         //直接输入命令。开始目录就是training的父目录
-        new SSHService().sshcll("training/shell/spark/predict.sh");
-
+        new SSHService().sshcll("test.sh");
     }
 }

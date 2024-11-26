@@ -10,9 +10,39 @@ const accessHeader = () => {
 }
 
 const defaultError = (error) => {
-    console.error(error)
-    ElMessage.error('Some errors have occurred, please contact the administrator')
-}
+    console.error(error); // 打印完整错误信息，方便调试
+
+    // 获取错误状态码和后端返回的信息
+    const statusCode = error.response?.status; // HTTP状态码
+    const errorMessage = error.response?.data?.message || 'Unknown error occurred'; // 后端返回的错误信息
+
+    // 根据状态码显示不同提示信息
+    let userMessage = 'Some errors have occurred, please contact the administrator!!!!!!!';
+
+    switch (statusCode) {
+        case 400:
+            userMessage = `Bad Request: ${errorMessage || 'Please check your input.'}`;
+            break;
+        case 401:
+            userMessage = 'Unauthorized: Please login first.';
+            break;
+        case 403:
+            userMessage = 'Forbidden: You do not have permission to perform this action.';
+            break;
+        case 404:
+            userMessage = `Not Found: The requested resource is not available. (${errorMessage})`;
+            break;
+        case 500:
+            userMessage = 'Internal Server Error: Please contact the administrator.';
+            break;
+        default:
+            userMessage = `Error: ${errorMessage || 'Unexpected error occurred.'}`;
+            break;
+    }
+
+    // 显示提示框
+    ElMessage.error(userMessage);
+};
 
 const defaultFailure = (message, status, url) => {
     console.warn(`The address of the request: ${url}, Status code: ${status}, error message: ${message}`)
