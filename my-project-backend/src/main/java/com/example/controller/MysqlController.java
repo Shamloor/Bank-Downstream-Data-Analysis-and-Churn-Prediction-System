@@ -2,16 +2,10 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.service.MysqlService;
-import com.example.service.SSHService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -23,23 +17,28 @@ public class MysqlController {
     @Autowired
     private MysqlService mysqlService;
 
-//    @GetMapping("/table/{tablename:.+}")
-//    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String tablename) {
-//        return ResponseEntity.ok(
-//                messageHandle(() -> mysqlService.queryTable(tablename))  // 返回文件内容
-//        );}
-
-    @PostMapping("/query-charts")
-    public ResponseEntity<RestBean<Map<String, List<Map<String, Object>>>>> queryAllCharts() {
-        return ResponseEntity.ok(
-                messageHandle(() -> {
-                    // 查询四个表的数据
-                    Map<String, List<Map<String, Object>>> allData = mysqlService.queryAllTablesData();
-                    return allData; // 返回所有表的数据
-                })
-        );
+    /**
+     * 获取指定表的数据
+     * @param tableName 表名
+     * @return 表中数据
+     */
+    @PostMapping("/data/{tableName}")
+    public RestBean<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
+        return messageHandle(() -> {
+            try {
+                return mysqlService.getTableData(tableName);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
+    /**
+     * 统一消息处理
+     * @param action 消息处理逻辑
+     * @param <T> 返回数据类型
+     * @return 包装的响应数据
+     */
     private <T> RestBean<T> messageHandle(Supplier<T> action) {
         try {
             T result = action.get();
@@ -48,5 +47,4 @@ public class MysqlController {
             return RestBean.failure(400, "Failed due to: " + e.getMessage());  // 错误的响应
         }
     }
-
 }

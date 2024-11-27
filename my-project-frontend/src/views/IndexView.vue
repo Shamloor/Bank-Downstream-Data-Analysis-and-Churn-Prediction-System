@@ -55,18 +55,9 @@
         </div>
       </div>
     </div>
-    <div v-if="dataSetUploaded" id='cao' class="content-section" style="background-color: #1a1a1a; border: 0px;">
-      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
-        <h1>请先上传数据集</h1>
-      </header>
-      <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onUserFileDrop">
-        <input type="file" id="xfile" ref="fileInput" @change="handleUserFileUpload" accept=".csv" hidden>
-        <p v-if="!selectedUserFile">将文件拖拽进来或 <span class="upload-link" @click="triggerFileInput">选择一个文件</span></p>
-        <p v-else>{{ selectedUserFile.name }}</p>
-      </div>
-      <div class="button" id="ning">
-        <button @click="xxxx" :disabled="!selectedUserFile" style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: 100px; margin-top: 50px;">Start Your Visualization!</button>
-      </div>
+
+    <div class="analysis-block">
+      <div id="balanceChart" class="chart" style="width: 100%; height: 400px;"></div>
     </div>
 
     <!-- 每日数据分析可视化模块 -->
@@ -102,6 +93,7 @@
       <div v-if="activeView === 'value_segmentation'" class="analysis-block">
         <div id="valueChart" class="chart" style="width: 100%; height: 400px;"></div>
       </div>
+
     </div>
 
     <!-- 模型训练模块 -->
@@ -177,10 +169,10 @@
 import { logout } from '@/net';
 import router from "@/router";
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import * as echarts from 'echarts';
 import worldMapData from 'echarts/map/json/world.json';
 import { ElMessage, ElLoading } from 'element-plus';
 import { get, post } from "@/net";
+import * as echarts from 'echarts';
 import axios from 'axios';
 
 
@@ -217,6 +209,7 @@ const componentKey1 = ref(0);
 const componentKey2 = ref(0);
 const componentKey3 = ref(0);
 let dataSetUploaded = ref(false);
+const chartInstance = ref(null); // 定义数据和图表实例
 
 
 // User profile panel
@@ -371,7 +364,7 @@ function xx() {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
-  checkDataSetStatus();
+  //checkDataSetStatus();
 
   if (dataSetUploaded.value == false)
   {
@@ -659,46 +652,76 @@ function handleNavigation(defaultId, alternateId) {
     }
 }
 
-function fetchChartData() {
-  axios.post('/api/mysql/query-charts')
-      .then((response) => {
-        chartData.value = response.data.data; // 存储后端返回的数据
-        renderChart(activeView.value); // 渲染初始视图
-      })
-      .catch((error) => {
-        console.error('Failed to fetch chart data:', error);
-      });
-}
-
-function renderChart(view) {
-  let chartDom;
-  let option;
-
-  if (view === 'balance_distribution') {
-    chartDom = document.getElementById('balanceChart');
-    const data = chartData.value.ads_customer_balance_distribution || [];
-    option = {
-      title: { text: '客户余额分布' },
-      tooltip: {},
-      xAxis: { type: 'category', data: data.map((item) => item.BalanceRange) },
-      yAxis: { type: 'value' },
-      series: [{ name: '客户数量', type: 'bar', data: data.map((item) => item.CustomerCount) }],
-    };
-  }
-
-  if (chartDom && option) {
-    const chart = echarts.init(chartDom);
-    chart.setOption(option);
+// 获取数据函数
+async function fetchBalanceDistribution() {
+  try {
+    const response = await axios.post(`/api/mysql/data/ads_customer_balance_distribution`);
+    if (response.data.code === 200) {
+      const chartData = response.data.data; // 假设返回的数据格式符合需求
+      renderBalanceChart(chartData);
+    } else {
+      console.error('API Error:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Fetch Error:', error);
   }
 }
+
+// 渲染图表函数
+function renderBalanceChart(data) {
+  if (!chartInstance.value) {
+    chartInstance.value = echarts.init(document.getElementById('balanceChart'));
+  }
+
+  const balanceRanges = data.map(item => item.BalanceRange);
+  const customerCounts = data.map(item => item.CustomerCount);
+
+  const option = {
+    title: {
+      text: '客户余额分布',
+      left: 'center'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left'
+    },
+    series: [
+      {
+        name: '客户数量',
+        type: 'pie',
+        radius: '50%',
+        data: balanceRanges.map((range, index) => ({
+          value: customerCounts[index],
+          name: range
+        })),
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  };
+
+  chartInstance.value.setOption(option);
+}
+
 
 onMounted(() => {
-  fetchChartData(); // 在组件挂载时加载数据
+  fetchBalanceDistribution();
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
+
+
 
 </script>
 
@@ -1257,6 +1280,11 @@ ul {
 
 .file-preview-container th {
   background-color: #a8a8a8; /* Table header background color */
+}
+
+.chart {
+  width: 100%;
+  height: 400px;
 }
 
 /* Responsive font sizes */

@@ -49,39 +49,52 @@
 </template>
 
 <script setup>
-import {User, Lock} from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue';
 import router from "@/router";
-import {reactive, ref} from "vue";
-import {login} from '@/net'
+import { reactive, ref } from "vue";
+import axios from "axios";
 
-const formRef = ref()
+const formRef = ref();
 const form = reactive({
   username: '',
   password: '',
   remember: false
-})
+});
 
 const rules = {
   username: [
     { required: true, message: 'Please enter a username' }
   ],
   password: [
-    { required: true, message: 'Please enter your password'}
+    { required: true, message: 'Please enter your password' }
   ]
-}
+};
 
-function userLogin() {
-  formRef.value.validate((isValid) => {
-    if(isValid) {
+async function userLogin() {
+  formRef.value.validate(async (isValid) => {
+    if (isValid) {
       const loadingInstance = ElLoading.service({
         lock: true,
         text: 'Processing, please wait...',
         background: 'rgba(0, 0, 0, 0.7)'
       });
       try {
-        login(form.username, form.password, form.remember, () => router.push("/index"))
-      }
-      finally {
+        const response = await axios.post('/api/auth/login', {
+          username: form.username,
+          password: form.password
+        });
+
+        if (response.data.code === 200) {
+          const token = response.data.data.token;
+          localStorage.setItem('token', token); // 存储 Token 到 localStorage
+          router.push('/index'); // 登录成功跳转
+        } else {
+          ElMessage.error(response.data.message || 'Login failed');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        ElMessage.error('An error occurred during login.');
+      } finally {
         loadingInstance.close();
       }
     }
@@ -90,5 +103,4 @@ function userLogin() {
 </script>
 
 <style scoped>
-
 </style>
