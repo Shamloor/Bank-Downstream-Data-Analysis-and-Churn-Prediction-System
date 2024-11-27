@@ -28,7 +28,7 @@ async function fetchBalanceDistribution() {
   try {
 
     const response = await axios.post('/mysql/data/ads_customer_balance_distribution'); // 替换为后端接口路径
-    console.log(response);
+    console.log("Now print the structure of response" + response);
     if (response.data.code === 200) {
       const chartData = response.data.data; // 假设返回数据格式正确
       renderBalanceChart(chartData);

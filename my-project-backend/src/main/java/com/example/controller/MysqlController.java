@@ -24,6 +24,7 @@ public class MysqlController {
      */
     @PostMapping("/data/{tableName}")
     public RestBean<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
+        System.out.println("Requested Table: " + tableName);
         return messageHandle(() -> {
             try {
                 return mysqlService.getTableData(tableName);
