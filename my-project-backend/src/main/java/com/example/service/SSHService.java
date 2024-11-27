@@ -159,8 +159,8 @@ public class SSHService {
         }
     }
 
-    public static void main(String[] args) {
-        //直接输入命令。开始目录就是training的父目录
-        new SSHService().sshcll("test.sh");
-    }
+//    public static void main(String[] args) {
+//        //直接输入命令。开始目录就是training的父目录
+//        new SSHService().sshcll("test.sh");
+//    }
 }

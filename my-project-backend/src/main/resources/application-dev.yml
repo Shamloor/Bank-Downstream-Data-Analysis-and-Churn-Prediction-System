@@ -65,3 +65,6 @@ spring:
       host: niit01
       port: 6379
       password: 123456
+  logging:
+    level:
+      root: DEBUG
