@@ -50,6 +50,10 @@ spring:
       origin: '*'
       credentials: false
       methods: '*'
+    resources:
+      add-mappings: false
+  mvc:
+    static-path-pattern: /static/**
   servlet:
     multipart:
   # Max file size，默认1M

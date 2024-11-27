@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.entity.RestBean;
 import com.example.service.MysqlService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@Validated
 @RestController
 @RequestMapping("/api/mysql")
 public class MysqlController {
@@ -22,6 +24,7 @@ public class MysqlController {
      * @param tableName 表名
      * @return 表中数据
      */
+    //@PostMapping("/data/{tableName}")
     @PostMapping("/data/{tableName}")
     public RestBean<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
         System.out.println("Requested Table: " + tableName);

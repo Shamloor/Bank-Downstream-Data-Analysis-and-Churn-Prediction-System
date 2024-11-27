@@ -44,6 +44,16 @@ public class ErrorPageController extends AbstractErrorController {
      * @return 错误信息
      */
     private Optional<String> convertErrorMessage(HttpStatus status, HttpServletRequest request) {
+        System.out.println("\n\n\n\nMethod: " + request.getMethod());
+        System.out.println("Request URI: " + request.getRequestURI());
+        System.out.println("Query String: " + request.getQueryString());
+        System.out.println("Headers:");
+        request.getHeaderNames().asIterator().forEachRemaining(header ->
+                System.out.println(header + ": " + request.getHeader(header)));
+        System.out.println("Attributes:");
+        request.getAttributeNames().asIterator().forEachRemaining(attr ->
+                System.out.println(attr + ": " + request.getAttribute(attr)));
+
         String value = switch (status.value()) {
             case 400 -> "请求参数有误";
             case 404 -> "请求的接口不存在: " + request.getRequestURI(); // 动态加入请求路径
