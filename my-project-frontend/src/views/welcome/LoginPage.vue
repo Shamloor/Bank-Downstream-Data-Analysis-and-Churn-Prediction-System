@@ -79,7 +79,22 @@ function userLogin() {
         background: 'rgba(0, 0, 0, 0.7)'
       });
       try {
-        login(form.username, form.password, form.remember, () => router.push("/index"))
+        //login(form.username, form.password, form.remember, () => router.push("/index"))
+        login(form.username, form.password, form.remember, (response) => {
+          console.log("Response from login:", response);
+          if (response && response.token) {
+            // 保存 Token 到 LocalStorage
+            localStorage.setItem('token', response.token);
+
+            // 在命令行打印 Token
+            console.log("Token:", response.token);
+
+            // 跳转到首页
+            router.push("/index");
+          } else {
+            ElMessage.error(response.message || "Login failed");
+          }
+        });
       }
       finally {
         loadingInstance.close();
