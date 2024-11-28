@@ -187,7 +187,7 @@ const images = ref([
 ]);
 let autoScrollInterval = null;
 const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
-const activeView = ref('value_segmentation'); // Currently Active View
+
 const chartData = ref({}); // All data from backend
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
@@ -535,8 +535,16 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-// 定义chartInstance
-const chartInstances = ref(null);
+// 默认activeView
+const activeView = ref('balance_distribution'); // Currently Active View
+
+// 用一个对象存储不同的图表实例
+const chartInstances = {
+  balanceChart: null,
+  churnChart: null,
+  featureChart: null,
+  valueChart: null
+};
 
 // 数据获取和可视化函数
 async function fetchDataAndRenderChart(tableName) {
@@ -578,8 +586,9 @@ function renderBalanceDistribution(data) {
     return;
   }
 
-  if (!chartInstance.value) {
-    chartInstance.value = echarts.init(chartDom);
+  // 检查图表实例是否已存在，如果不存在则创建一个新的实例
+  if (!chartInstances.balanceChart) {
+    chartInstances.balanceChart = echarts.init(chartDom);
   }
 
   const balanceRanges = data.map(item => item.BalanceRange);
@@ -619,7 +628,7 @@ function renderBalanceDistribution(data) {
     ]
   };
 
-  chartInstance.value.setOption(option);
+  chartInstances.balanceChart.setOption(option);
 }
 // 渲染ads_customer_churn_rate
 function renderChurnRate(data) {
@@ -630,8 +639,9 @@ function renderChurnRate(data) {
     return;
   }
 
-  if (!chartInstance.value) {
-    chartInstance.value = echarts.init(chartDom);
+  // 检查图表实例是否已存在，如果不存在则创建一个新的实例
+  if (!chartInstances.churnChart) {
+    chartInstances.churnChart = echarts.init(chartDom);
   }
 
   // 从数据中提取相关字段
@@ -733,7 +743,7 @@ function renderChurnRate(data) {
   };
 
   // 将 ECharts 配置应用到图表实例中
-  chartInstance.value.setOption(option);
+  chartInstances.churnChart.setOption(option);
 }
 // 渲染ads_customer_feature_distribution
 function renderFeatureDistribution(data) {
@@ -744,10 +754,9 @@ function renderFeatureDistribution(data) {
     return;
   }
 
-  // 初始化 ECharts 实例
-  let chartInstance = echarts.getInstanceByDom(chartDom);
-  if (!chartInstance) {
-    chartInstance = echarts.init(chartDom);
+  // 检查图表实例是否已存在，如果不存在则创建一个新的实例
+  if (!chartInstances.featureChart) {
+    chartInstances.featureChart = echarts.init(chartDom);
   }
 
   // 提取性别和年龄组的分布数据
@@ -850,7 +859,7 @@ function renderFeatureDistribution(data) {
   };
 
   // 使用配置项设置图表
-  chartInstance.setOption(option);
+  chartInstances.featureChart.setOption(option);
 }
 // 渲染ads_customer_value_segmentation
 function renderValueSegmentation(data) {
@@ -861,10 +870,9 @@ function renderValueSegmentation(data) {
     return;
   }
 
-  // 初始化 ECharts 实例
-  let chartInstance = echarts.getInstanceByDom(chartDom);
-  if (!chartInstance) {
-    chartInstance = echarts.init(chartDom);
+  // 检查图表实例是否已存在，如果不存在则创建一个新的实例
+  if (!chartInstances.valueChart) {
+    chartInstances.valueChart = echarts.init(chartDom);
   }
 
   // 提取分层数据
@@ -1037,26 +1045,43 @@ function renderValueSegmentation(data) {
   };
 
   // 使用配置项设置图表
-  chartInstance.setOption(option);
+  chartInstances.valueChart.setOption(option);
 }
 
 // 监听 activeView 变化, 切换回时重新渲染图表
 watch(activeView, async (newView, oldView) => {
+  // 监听不同的 view 类型
   if (newView === 'balance_distribution') {
-    // 在切换到 'balance_distribution' 时重新渲染图表
     await nextTick();  // 等待 DOM 更新完成后初始化图表
     await fetchDataAndRenderChart("ads_customer_balance_distribution");
-  } else if (oldView === 'balance_distribution') {
-    // 在离开 'balance_distribution' 时销毁图表实例
-    disposeChart();
+  } else if (newView === 'churn_rate') {
+    await nextTick();
+    await fetchDataAndRenderChart("ads_customer_churn_rate");
+  } else if (newView === 'feature_distribution') {
+    await nextTick();
+    await fetchDataAndRenderChart("ads_customer_feature_distribution");
+  } else if (newView === 'value_segmentation') {
+    await nextTick();
+    await fetchDataAndRenderChart("ads_customer_value_segmentation");
+  }
+
+  // 离开某个视图时销毁图表实例
+  if (oldView === 'balance_distribution') {
+    disposeChart('balanceChart');
+  } else if (oldView === 'churn_rate') {
+    disposeChart('churnChart');
+  } else if (oldView === 'feature_distribution') {
+    disposeChart('featureChart');
+  } else if (oldView === 'value_segmentation') {
+    disposeChart('valueChart');
   }
 });
 
 // 销毁 ECharts 实例, 保护内存
-function disposeChart() {
-  if (chartInstance.value) {
-    chartInstance.value.dispose();
-    chartInstance.value = null;
+function disposeChart(chartName) {
+  if (chartInstances[chartName]) {
+    chartInstances[chartName].dispose();
+    chartInstances[chartName] = null;
   }
 }
 
@@ -1512,8 +1537,8 @@ ul {
   left: -270px;
   top: 350px;
   bottom: 0;
-  width: 250px;
-  height: 300px;
+  width: 150px;
+  height: 224px;
   background-color: #333;
   transition: left 0.3s;
   z-index: 1002;
@@ -1531,7 +1556,7 @@ ul {
 
 .sidebar-btn {
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   border: 1px solid #555;
   background-color: #444;
   color: white;
