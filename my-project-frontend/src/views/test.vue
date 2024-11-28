@@ -1,5 +1,5 @@
 <template>
-  <div class="analysis-block">
+  <div v-if="activeView === 'balance_distribution'" class="analysis-block">
     <div id="balanceChart" class="chart"></div>
   </div>
 </template>
@@ -8,6 +8,8 @@
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
+
+const activeView = ref('balance_distribution'); // Currently Active View
 
 // 定义图表实例
 const chartInstance = ref(null);
@@ -103,5 +105,11 @@ onMounted(() => {
 .chart {
   width: 100%;
   height: 400px;
+  object-fit: contain;
+  margin: 5px;
+  flex: 1;
+  background-color: #7a7a7a;
+  padding: 10px;
+  border-radius: 8px;
 }
 </style>

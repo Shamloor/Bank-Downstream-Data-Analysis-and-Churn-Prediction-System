@@ -1,163 +1,168 @@
 <template>
   <div>
-    <div class="navbar" :style="{ backgroundColor: navbarBg }">
-      <div class="logo">APen</div>
-      <el-button @click="scrollTo('home')">主页</el-button>
-      <el-button @click="handleNavigation('RealTimeDisplay', 'cao')">实时修改日志</el-button>
-      <el-button @click="handleNavigation('DataAnalysis', 'cao')">分析可视化</el-button>
-      <el-button @click="handleNavigation('ModelTraining', 'cao')">训练模型</el-button>
-      <el-button @click="handleNavigation('NewDataPrediction', 'cao')">预测新数据</el-button>
-      <div class="profile-icon" @click="toggleProfilePanel">
-        <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">
-      </div>
-    </div>
-    <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">
-      <div class="profile-content">
-        <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>
-        <div class="username" id="username-display"></div>
-        <div @click="showHelp" class="help-link">Status: Analyzed</div>
-        <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>
-      </div>
-    </div>
-    <div id="home" class="content-section">
-      <div id="home1">
-        <section id="text">
-          <header style="font-size: 14px;">
-            <h1>欢迎来到</h1>
-            <h1>银行下游数据分析与预测系统</h1>
-            <p style="font-size: 14px;">探索全面的数据分析以了解市场趋势和客户行为。</p>
-          </header>
-          <article style="font-size: 14px;">
-            <h2>关键功能</h2>
-            <ul>
-              <li>实时展示修改日志</li>
-              <li>每日更新下游数据分析结果</li>
-              <li>数据建模与预测趋势</li>
-            </ul>
-          </article>
-            <div class="actions">
-              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>
-            </div>
-        </section>
-        <div class="image-slider">
-          <div class="carousel">
-            <div class="carousel-inner" :style="{ 'transform': `translateX(-${currentIndex * 100}%)` }" @click="next">
-              <div class="carousel-item" v-for="(image, index) in images" :key="index">
-                <img :src="image.src" :alt="image.alt">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="marquee" style="margin-top: 60px;">
-        <div class="marquee-content">
-          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>
-        </div>
-      </div>
-    </div>
+<!--    <div class="navbar" :style="{ backgroundColor: navbarBg }">-->
+<!--      <div class="logo">A&P</div>-->
+<!--      <el-button @click="scrollTo('home')">主页</el-button>-->
+<!--      <el-button @click="handleNavigation('RealTimeDisplay')">实时修改日志</el-button>-->
+<!--      <el-button @click="handleNavigation('DataAnalysis')">分析可视化</el-button>-->
+<!--      <el-button @click="handleNavigation('ModelTraining')">训练模型</el-button>-->
+<!--      <el-button @click="handleNavigation('NewDataPrediction')">预测新数据</el-button>-->
+<!--      <div class="profile-icon" @click="toggleProfilePanel">-->
+<!--        <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; 打开右上角的用户图标 &ndash;&gt;-->
+<!--    <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">-->
+<!--      <div class="profile-content">-->
+<!--        <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>-->
+<!--        <div class="username" id="username-display"></div>-->
+<!--        <div @click="showHelp" class="help-link">Status: Analyzed</div>-->
+<!--        <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div id="home" class="content-section">-->
+<!--      <div id="home1">-->
+<!--        <section id="text">-->
+<!--          <header style="font-size: 14px;">-->
+<!--            <h1>欢迎来到</h1>-->
+<!--            <h1>银行下游数据分析与预测系统</h1>-->
+<!--            <p style="font-size: 14px;">探索全面的数据分析以了解市场趋势和客户行为。</p>-->
+<!--          </header>-->
+<!--          <article style="font-size: 14px;">-->
+<!--            <h2>关键功能</h2>-->
+<!--            <ul>-->
+<!--              <li>实时展示修改日志</li>-->
+<!--              <li>每日更新下游数据分析结果</li>-->
+<!--              <li>数据建模与预测趋势</li>-->
+<!--            </ul>-->
+<!--          </article>-->
+<!--            <div class="actions">-->
+<!--              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>-->
+<!--            </div>-->
+<!--        </section>-->
+<!--        <div class="image-slider">-->
+<!--          <div class="carousel">-->
+<!--            <div class="carousel-inner" :style="{ 'transform': `translateX(-${currentIndex * 100}%)` }" @click="next">-->
+<!--              <div class="carousel-item" v-for="(image, index) in images" :key="index">-->
+<!--                <img :src="image.src" :alt="image.alt">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="marquee" style="margin-top: 60px;">-->
+<!--        <div class="marquee-content">-->
+<!--          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <!-- 每日数据分析可视化模块 -->
-    <div v-if="!dataSetUploaded" id="DataAnalysis" class="content-section">
-      <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>
-      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
-        <h1>数据分析</h1>
-        <button style="height: 80%; font-size: 25px; margin-right: 20px; margin-top: 20px;" class="toggle-sidebar-button" @click="toggleSidebar">☰</button>
-      </header>
-      <div class="sidebar" :style="sidebarStyle">
-        <!-- Navigation content -->
-        <ul>
-          <li><button class="sidebar-btn" @click="setActiveView('balance_distribution')">客户余额分布</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('churn_rate')">客户流失率</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('feature_distribution')">客户特征分布</button></li>
-          <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>
-        </ul>
-      </div>
 
-      <!-- 客户余额分布 -->
-      <div v-if="activeView === 'balance_distribution'" class="analysis-block">
-        <div id="balanceChart" class="chart" style="width: 100%; height: 400px;"></div>
-      </div>
-      <!-- 客户流失率 -->
-      <div v-if="activeView === 'churn_rate'" class="analysis-block">
-        <div id="churnChart" class="chart" style="width: 100%; height: 400px;"></div>
-      </div>
-      <!-- 客户特征分布 -->
-      <div v-if="activeView === 'feature_distribution'" class="analysis-block">
-        <div id="featureChart" class="chart" style="width: 100%; height: 400px;"></div>
-      </div>
-      <!-- 客户价值细分 -->
-      <div v-if="activeView === 'value_segmentation'" class="analysis-block">
-        <div id="valueChart" class="chart" style="width: 100%; height: 400px;"></div>
-      </div>
-
+    <div v-if="activeView === 'balance_distribution'" class="analysis-block">
+      <div id="balanceChart" class="chart"></div>
     </div>
+<!--    &lt;!&ndash; 每日数据分析可视化模块 &ndash;&gt;-->
+<!--    <div id="DataAnalysis" class="content-section">-->
+<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>-->
+<!--      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">-->
+<!--        <h1>数据分析</h1>-->
+<!--        <button style="height: 80%; font-size: 25px; margin-right: 20px; margin-top: 20px;" class="toggle-sidebar-button" @click="toggleSidebar">☰</button>-->
+<!--      </header>-->
+<!--      <div class="sidebar" :style="sidebarStyle">-->
+<!--        &lt;!&ndash; Navigation content &ndash;&gt;-->
+<!--        <ul>-->
+<!--          <li><button class="sidebar-btn" @click="setActiveView('balance_distribution')">客户余额分布</button></li>-->
+<!--          <li><button class="sidebar-btn" @click="setActiveView('churn_rate')">客户流失率</button></li>-->
+<!--          <li><button class="sidebar-btn" @click="setActiveView('feature_distribution')">客户特征分布</button></li>-->
+<!--          <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>-->
+<!--        </ul>-->
+<!--      </div>-->
 
-    <!-- 模型训练模块 -->
-    <div v-if="!dataSetUploaded" id="ModelTraining" class="content-section">
-      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
-      <header style="margin-top: 70px; margin-left: 20px;">
-        <h1>模型训练</h1>
-      </header>
-      <div class="button">
-        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>
-      </div>
-      <div class="table-container" :key="componentKey1"><table style="width: 100%;">
-          <thead>
-            <tr>
-              <th v-for="(header, index) in mheaders" :key="'header-' + index">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, index) in mprocessedData" :key="'row-' + index">
-              <td v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="row" :key="componentKey2">
-        <img src="./img/roc_curve.png" alt="" class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">
-      </div>
-    </div>
+<!--      &lt;!&ndash; 客户余额分布 &ndash;&gt;-->
+<!--      <div v-if="activeView === 'balance_distribution'" class="analysis-block">-->
+<!--        <div id="balanceChart" class="chart"></div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash; 客户流失率 &ndash;&gt;-->
+<!--      <div v-if="activeView === 'churn_rate'" class="analysis-block">-->
+<!--        <div id="churnChart" class="chart" style="width: 100%; height: 400px;"></div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash; 客户特征分布 &ndash;&gt;-->
+<!--      <div v-if="activeView === 'feature_distribution'" class="analysis-block">-->
+<!--        <div id="featureChart" class="chart" style="width: 100%; height: 400px;"></div>-->
+<!--      </div>-->
+<!--      &lt;!&ndash; 客户价值细分 &ndash;&gt;-->
+<!--      <div v-if="activeView === 'value_segmentation'" class="analysis-block">-->
+<!--        <div id="valueChart" class="chart" style="width: 100%; height: 400px;"></div>-->
+<!--      </div>-->
 
-    <!-- 用户流失率预测模块 -->
-    <div v-if="!dataSetUploaded" id="NewDataPrediction" class="content-section">
-      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
-      <header style="margin-top: 70px; margin-left: 20px;">
-        <h1>上传新数据进行预测</h1>
-      </header>
-      <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onFileDrop">
-        <input type="file" id="file" ref="fileInput" @change="handleFileUpload" accept=".csv" hidden>
-        <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>
-        <p v-else>{{ selectedFile.name }}</p>
-      </div>
-      <div class="button" style="margin-left: 42%;">
-        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>
-        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
-        <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>
-      </div>
-      <div class="display-data">
-        <h3 style="margin: 0px;">文件预览: </h3>
-        <div class="file-preview-container" style="height: 300px;" :key="componentKey">
-          <table>
-            <thead>
-              <tr>
-                <th v-for="(header, index) in headers" :key="'header-' + index">{{ header }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(row, index) in processedData" :key="'row-' + index">
-                <td style="color: black;" v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+<!--    </div>-->
 
-    <footer class="footer">
-      Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>
-    </footer>
+<!--    &lt;!&ndash; 模型训练模块 &ndash;&gt;-->
+<!--    <div id="ModelTraining" class="content-section">-->
+<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>-->
+<!--      <header style="margin-top: 70px; margin-left: 20px;">-->
+<!--        <h1>模型训练</h1>-->
+<!--      </header>-->
+<!--      <div class="button">-->
+<!--        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>-->
+<!--      </div>-->
+<!--      <div class="table-container" :key="componentKey1"><table style="width: 100%;">-->
+<!--          <thead>-->
+<!--            <tr>-->
+<!--              <th v-for="(header, index) in mheaders" :key="'header-' + index">{{ header }}</th>-->
+<!--            </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            <tr v-for="(row, index) in mprocessedData" :key="'row-' + index">-->
+<!--              <td v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </div>-->
+<!--      <div class="row" :key="componentKey2">-->
+<!--        <img src="./img/roc_curve.png" alt="" class="chart" style="background-color: #cfcfcf;">-->
+<!--        <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; 用户流失率预测模块 &ndash;&gt;-->
+<!--    <div id="NewDataPrediction" class="content-section">-->
+<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>-->
+<!--      <header style="margin-top: 70px; margin-left: 20px;">-->
+<!--        <h1>上传新数据进行预测</h1>-->
+<!--      </header>-->
+<!--      <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onFileDrop">-->
+<!--        <input type="file" id="file" ref="fileInput" @change="handleFileUpload" accept=".csv" hidden>-->
+<!--        <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>-->
+<!--        <p v-else>{{ selectedFile.name }}</p>-->
+<!--      </div>-->
+<!--      <div class="button" style="margin-left: 42%;">-->
+<!--        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>-->
+<!--        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>-->
+<!--        <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>-->
+<!--      </div>-->
+<!--      <div class="display-data">-->
+<!--        <h3 style="margin: 0px;">文件预览: </h3>-->
+<!--        <div class="file-preview-container" style="height: 300px;" :key="componentKey">-->
+<!--          <table>-->
+<!--            <thead>-->
+<!--              <tr>-->
+<!--                <th v-for="(header, index) in headers" :key="'header-' + index">{{ header }}</th>-->
+<!--              </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--              <tr v-for="(row, index) in processedData" :key="'row-' + index">-->
+<!--                <td style="color: black;" v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>-->
+<!--              </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <footer class="footer">-->
+<!--      Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>-->
+<!--    </footer>-->
   </div>
 </template>
 
@@ -204,7 +209,6 @@ const componentKey = ref(0);
 const componentKey1 = ref(0);
 const componentKey2 = ref(0);
 const componentKey3 = ref(0);
-let dataSetUploaded = ref(false);
 const chartInstance = ref(null); // 定义数据和图表实例
 
 
@@ -254,7 +258,7 @@ function handleScroll() {
   const scrollY = window.scrollY + window.innerHeight / 2;  // Consider the midpoint position
   const sections = {
     home: document.getElementById('home').offsetTop,
-    RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
+    // RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
     DataAnalysis: document.getElementById('DataAnalysis').offsetTop,
     ModelTraining: document.getElementById('ModelTraining').offsetTop,
     NewDataPrediction: document.getElementById('NewDataPrediction').offsetTop
@@ -353,19 +357,9 @@ function initWorldMap(chart) {
   chart.setOption(option);
 }
 
-function xx() {
-  const chart = echarts.init(document.getElementById('worldChart'));
-  initWorldMap(chart);
-}
-
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   //checkDataSetStatus();
-
-  if (dataSetUploaded.value == false)
-  {
-    fenmysql();
-  }
 
   if (sessionStorage.getItem('uploadSuccess') === 'true') {
     // Delay for a while to show the message, to ensure the page has finished loading
@@ -388,9 +382,6 @@ function toggleSidebar() {
 
 function setActiveView(view) {
   activeView.value = view;
-  nextTick(() => {
-    xx();  // Assuming initMap is the function to initialize the map
-  });
 }
 
 // Trigger file selection
@@ -604,48 +595,8 @@ function downloadMFile() {
 
 }
 
-function checkDataSetStatus() {
-  try {
-    const username = sessionStorage.getItem('username');
-    console.log(username)
-        // Get the div element with ID 'username-display'
-    let displayDiv = document.getElementById('username-display');
-    // Set the text content of the div to the value of the username variable
-    displayDiv.textContent = `Username: ${username}`;
-
-    const message1 = username + '.csv';
-
-    get(`/api/ssh/status/${message1}`,
-    (data) => {
-        console.log(data)
-        if (data.includes('Error: File does not exist at path'))
-        {
-          ElMessage.warning('Please upload dataset!');
-          dataSetUploaded.value = true;
-        }
-        else
-        {
-          dataSetUploaded.value = false;
-        }
-    },
-    undefined,  // No intermediate processing function defined here
-    (message) => {
-        ElMessage.warning(`Download failed: ${message}`);
-        coldTime.value = 0;  // This coldTime handling may not apply to the download logic, it should be adjusted or removed
-    });
-  } catch (error) {
-    ElMessage.error('Failed to check dataset status: ' + error.message);
-    console.log("Fuck")
-  }
-}
-
-function handleNavigation(defaultId, alternateId) {
-    if (dataSetUploaded.value) {
-        scrollTo(alternateId);
-        ElMessage.warning('Please upload dataset first');
-    } else {
-        scrollTo(defaultId);
-    }
+function handleNavigation(Id) {
+  scrollTo(Id);
 }
 
 axios.defaults.baseURL = '/api'; // 设置基础路径
@@ -659,12 +610,14 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-// 获取数据函数
+// 数据获取函数
 async function fetchBalanceDistribution() {
   try {
-    const response = await axios.post(`/mysql/data/ads_customer_balance_distribution`);
+
+    const response = await axios.post('/mysql/data/ads_customer_balance_distribution'); // 替换为后端接口路径
+    console.log("Now print the structure of response" + response);
     if (response.data.code === 200) {
-      const chartData = response.data.data; // 假设返回的数据格式符合需求
+      const chartData = response.data.data; // 假设返回数据格式正确
       renderBalanceChart(chartData);
     } else {
       console.error('API Error:', response.data.message);
@@ -676,13 +629,21 @@ async function fetchBalanceDistribution() {
 
 // 渲染图表函数
 function renderBalanceChart(data) {
+  // 获取图表 DOM 容器
+  const chartDom = document.getElementById('balanceChart');
+  if (!chartDom) {
+    console.error('Chart DOM not found');
+    return;
+  }
+
   if (!chartInstance.value) {
-    chartInstance.value = echarts.init(document.getElementById('balanceChart'));
+    chartInstance.value = echarts.init(chartDom);
   }
 
   const balanceRanges = data.map(item => item.BalanceRange);
   const customerCounts = data.map(item => item.CustomerCount);
 
+  // 配置 ECharts 图表
   const option = {
     title: {
       text: '客户余额分布',
@@ -720,6 +681,7 @@ function renderBalanceChart(data) {
 }
 
 
+
 onMounted(() => {
   fetchBalanceDistribution();
 });
@@ -728,7 +690,12 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 
-
+// 在组件卸载时销毁图表实例
+onBeforeUnmount(() => {
+  if (chartInstance.value) {
+    chartInstance.value.dispose();
+  }
+});
 
 </script>
 
@@ -1222,7 +1189,8 @@ ul {
 }
 
 .chart {
-  width: 48%;
+  width: 100%;
+  height: 400px;
   object-fit: contain;
   margin: 5px;
   flex: 1;
@@ -1287,11 +1255,6 @@ ul {
 
 .file-preview-container th {
   background-color: #a8a8a8; /* Table header background color */
-}
-
-.chart {
-  width: 100%;
-  height: 400px;
 }
 
 /* Responsive font sizes */

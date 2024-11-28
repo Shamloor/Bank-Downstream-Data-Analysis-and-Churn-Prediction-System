@@ -105,7 +105,7 @@ function login(username, password, remember, success, failure = defaultFailure){
     }, (data) => {
         storeAccessToken(remember, data.token, data.expire)
         sessionStorage.setItem('username', data.username);
-        ElMessage.success(`Login successful, welcome ${data.username} Come to our system`)
+        ElMessage.success(`成功登录, 欢迎来到银行数据分析与预测系统 !`)
         success(data)
     }, failure)
 }
