@@ -582,7 +582,7 @@ function renderBalanceDistribution(data) {
   // 获取图表 DOM 容器
   const chartDom = document.getElementById('balanceChart');
   if (!chartDom) {
-    console.error('Chart DOM not found');
+    //console.error('Chart DOM not found');
     return;
   }
 
@@ -635,7 +635,7 @@ function renderChurnRate(data) {
   // 获取图表 DOM 容器
   const chartDom = document.getElementById('churnChart');
   if (!chartDom) {
-    console.error('Churn Chart DOM not found');
+    //console.error('Churn Chart DOM not found');
     return;
   }
 
@@ -750,7 +750,7 @@ function renderFeatureDistribution(data) {
   // 获取图表 DOM 容器
   const chartDom = document.getElementById('featureChart');
   if (!chartDom) {
-    console.error('Chart DOM not found');
+    //console.error('Chart DOM not found');
     return;
   }
 
@@ -866,7 +866,7 @@ function renderValueSegmentation(data) {
   // 获取图表 DOM 容器
   const chartDom = document.getElementById('valueChart');
   if (!chartDom) {
-    console.error('Chart DOM not found');
+    //console.error('Chart DOM not found');
     return;
   }
 
