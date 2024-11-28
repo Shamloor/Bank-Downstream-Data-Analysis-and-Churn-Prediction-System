@@ -1,176 +1,171 @@
 <template>
   <div>
-<!--    <div class="navbar" :style="{ backgroundColor: navbarBg }">-->
-<!--      <div class="logo">A&P</div>-->
-<!--      <el-button @click="scrollTo('home')">主页</el-button>-->
-<!--      <el-button @click="handleNavigation('RealTimeDisplay')">实时修改日志</el-button>-->
-<!--      <el-button @click="handleNavigation('DataAnalysis')">分析可视化</el-button>-->
-<!--      <el-button @click="handleNavigation('ModelTraining')">训练模型</el-button>-->
-<!--      <el-button @click="handleNavigation('NewDataPrediction')">预测新数据</el-button>-->
-<!--      <div class="profile-icon" @click="toggleProfilePanel">-->
-<!--        <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; 打开右上角的用户图标 &ndash;&gt;-->
-<!--    <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">-->
-<!--      <div class="profile-content">-->
-<!--        <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>-->
-<!--        <div class="username" id="username-display"></div>-->
-<!--        <div @click="showHelp" class="help-link">Status: Analyzed</div>-->
-<!--        <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div id="home" class="content-section">-->
-<!--      <div id="home1">-->
-<!--        <section id="text">-->
-<!--          <header style="font-size: 14px;">-->
-<!--            <h1>欢迎来到</h1>-->
-<!--            <h1>银行下游数据分析与预测系统</h1>-->
-<!--            <p style="font-size: 14px;">探索全面的数据分析以了解市场趋势和客户行为。</p>-->
-<!--          </header>-->
-<!--          <article style="font-size: 14px;">-->
-<!--            <h2>关键功能</h2>-->
-<!--            <ul>-->
-<!--              <li>实时展示修改日志</li>-->
-<!--              <li>每日更新下游数据分析结果</li>-->
-<!--              <li>数据建模与预测趋势</li>-->
-<!--            </ul>-->
-<!--          </article>-->
-<!--            <div class="actions">-->
-<!--              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--        <div class="image-slider">-->
-<!--          <div class="carousel">-->
-<!--            <div class="carousel-inner" :style="{ 'transform': `translateX(-${currentIndex * 100}%)` }" @click="next">-->
-<!--              <div class="carousel-item" v-for="(image, index) in images" :key="index">-->
-<!--                <img :src="image.src" :alt="image.alt">-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="marquee" style="margin-top: 60px;">-->
-<!--        <div class="marquee-content">-->
-<!--          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-
-    <div v-if="activeView === 'balance_distribution'" class="analysis-block">
-      <div id="balanceChart" class="chart"></div>
+    <div class="navbar" :style="{ backgroundColor: navbarBg }">
+      <div class="logo">A&P</div>
+      <el-button @click="scrollTo('home')">主页</el-button>
+      <el-button @click="handleNavigation('RealTimeDisplay')">实时修改日志</el-button>
+      <el-button @click="handleNavigation('DataAnalysis')">分析可视化</el-button>
+      <el-button @click="handleNavigation('ModelTraining')">训练模型</el-button>
+      <el-button @click="handleNavigation('NewDataPrediction')">预测新数据</el-button>
+      <div class="profile-icon" @click="toggleProfilePanel">
+        <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">
+      </div>
     </div>
-<!--    &lt;!&ndash; 每日数据分析可视化模块 &ndash;&gt;-->
-<!--    <div id="DataAnalysis" class="content-section">-->
-<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>-->
-<!--      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">-->
-<!--        <h1>数据分析</h1>-->
-<!--        <button style="height: 80%; font-size: 25px; margin-right: 20px; margin-top: 20px;" class="toggle-sidebar-button" @click="toggleSidebar">☰</button>-->
-<!--      </header>-->
-<!--      <div class="sidebar" :style="sidebarStyle">-->
-<!--        &lt;!&ndash; Navigation content &ndash;&gt;-->
-<!--        <ul>-->
-<!--          <li><button class="sidebar-btn" @click="setActiveView('balance_distribution')">客户余额分布</button></li>-->
-<!--          <li><button class="sidebar-btn" @click="setActiveView('churn_rate')">客户流失率</button></li>-->
-<!--          <li><button class="sidebar-btn" @click="setActiveView('feature_distribution')">客户特征分布</button></li>-->
-<!--          <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>-->
-<!--        </ul>-->
-<!--      </div>-->
+    <!-- 打开右上角的用户图标 -->
+    <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">
+      <div class="profile-content">
+        <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>
+        <div class="username" id="username-display"></div>
+        <div @click="showHelp" class="help-link">Status: Analyzed</div>
+        <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>
+      </div>
+    </div>
+    <div id="home" class="content-section">
+      <div id="home1">
+        <section id="text">
+          <header style="font-size: 14px;">
+            <h1>欢迎来到</h1>
+            <h1>银行下游数据分析与预测系统</h1>
+            <p style="font-size: 14px;">探索全面的数据分析以了解市场趋势和客户行为。</p>
+          </header>
+          <article style="font-size: 14px;">
+            <h2>关键功能</h2>
+            <ul>
+              <li>实时展示修改日志</li>
+              <li>每日更新下游数据分析结果</li>
+              <li>数据建模与预测趋势</li>
+            </ul>
+          </article>
+            <div class="actions">
+              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>
+            </div>
+        </section>
+        <div class="image-slider">
+          <div class="carousel">
+            <div class="carousel-inner" :style="{ 'transform': `translateX(-${currentIndex * 100}%)` }" @click="next">
+              <div class="carousel-item" v-for="(image, index) in images" :key="index">
+                <img :src="image.src" :alt="image.alt">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="marquee" style="margin-top: 60px;">
+        <div class="marquee-content">
+          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>
+        </div>
+      </div>
+    </div>
 
-<!--      &lt;!&ndash; 客户余额分布 &ndash;&gt;-->
-<!--      <div v-if="activeView === 'balance_distribution'" class="analysis-block">-->
-<!--        <div id="balanceChart" class="chart"></div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 客户流失率 &ndash;&gt;-->
-<!--      <div v-if="activeView === 'churn_rate'" class="analysis-block">-->
-<!--        <div id="churnChart" class="chart" style="width: 100%; height: 400px;"></div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 客户特征分布 &ndash;&gt;-->
-<!--      <div v-if="activeView === 'feature_distribution'" class="analysis-block">-->
-<!--        <div id="featureChart" class="chart" style="width: 100%; height: 400px;"></div>-->
-<!--      </div>-->
-<!--      &lt;!&ndash; 客户价值细分 &ndash;&gt;-->
-<!--      <div v-if="activeView === 'value_segmentation'" class="analysis-block">-->
-<!--        <div id="valueChart" class="chart" style="width: 100%; height: 400px;"></div>-->
-<!--      </div>-->
+    <!-- 每日数据分析可视化模块 -->
+    <div id="DataAnalysis" class="content-section">
+      <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>
+      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
+        <h1>数据分析</h1>
+        <button style="height: 80%; font-size: 25px; margin-right: 20px; margin-top: 20px;" class="toggle-sidebar-button" @click="toggleSidebar">☰</button>
+      </header>
+      <div class="sidebar" :style="sidebarStyle">
+        <!-- Navigation content -->
+        <ul>
+          <li><button class="sidebar-btn" @click="setActiveView('balance_distribution')">客户余额分布</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('churn_rate')">客户流失率</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('feature_distribution')">客户特征分布</button></li>
+          <li><button class="sidebar-btn" @click="setActiveView('value_segmentation')">客户价值细分</button></li>
+        </ul>
+      </div>
 
-<!--    </div>-->
+      <!-- 客户余额分布 -->
+      <div v-if="activeView === 'balance_distribution'" class="analysis-block">
+        <div id="balanceChart" class="chart"></div>
+      </div>
+      <!-- 客户流失率 -->
+      <div v-if="activeView === 'churn_rate'" class="analysis-block">
+        <div id="churnChart" class="chart"></div>
+      </div>
+      <!-- 客户特征分布 -->
+      <div v-if="activeView === 'feature_distribution'" class="analysis-block">
+        <div id="featureChart" class="chart"></div>
+      </div>
+      <!-- 客户价值细分 -->
+      <div v-if="activeView === 'value_segmentation'" class="analysis-block">
+        <div id="valueChart" class="chart"></div>
+      </div>
 
-<!--    &lt;!&ndash; 模型训练模块 &ndash;&gt;-->
-<!--    <div id="ModelTraining" class="content-section">-->
-<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>-->
-<!--      <header style="margin-top: 70px; margin-left: 20px;">-->
-<!--        <h1>模型训练</h1>-->
-<!--      </header>-->
-<!--      <div class="button">-->
-<!--        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>-->
-<!--      </div>-->
-<!--      <div class="table-container" :key="componentKey1"><table style="width: 100%;">-->
-<!--          <thead>-->
-<!--            <tr>-->
-<!--              <th v-for="(header, index) in mheaders" :key="'header-' + index">{{ header }}</th>-->
-<!--            </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--            <tr v-for="(row, index) in mprocessedData" :key="'row-' + index">-->
-<!--              <td v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>-->
-<!--            </tr>-->
-<!--          </tbody>-->
-<!--        </table>-->
-<!--      </div>-->
-<!--      <div class="row" :key="componentKey2">-->
-<!--        <img src="./img/roc_curve.png" alt="" class="chart" style="background-color: #cfcfcf;">-->
-<!--        <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">-->
-<!--      </div>-->
-<!--    </div>-->
+    </div>
 
-<!--    &lt;!&ndash; 用户流失率预测模块 &ndash;&gt;-->
-<!--    <div id="NewDataPrediction" class="content-section">-->
-<!--      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>-->
-<!--      <header style="margin-top: 70px; margin-left: 20px;">-->
-<!--        <h1>上传新数据进行预测</h1>-->
-<!--      </header>-->
-<!--      <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onFileDrop">-->
-<!--        <input type="file" id="file" ref="fileInput" @change="handleFileUpload" accept=".csv" hidden>-->
-<!--        <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>-->
-<!--        <p v-else>{{ selectedFile.name }}</p>-->
-<!--      </div>-->
-<!--      <div class="button" style="margin-left: 42%;">-->
-<!--        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>-->
-<!--        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>-->
-<!--        <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>-->
-<!--      </div>-->
-<!--      <div class="display-data">-->
-<!--        <h3 style="margin: 0px;">文件预览: </h3>-->
-<!--        <div class="file-preview-container" style="height: 300px;" :key="componentKey">-->
-<!--          <table>-->
-<!--            <thead>-->
-<!--              <tr>-->
-<!--                <th v-for="(header, index) in headers" :key="'header-' + index">{{ header }}</th>-->
-<!--              </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--              <tr v-for="(row, index) in processedData" :key="'row-' + index">-->
-<!--                <td style="color: black;" v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>-->
-<!--              </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- 模型训练模块 -->
+    <div id="ModelTraining" class="content-section">
+      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
+      <header style="margin-top: 70px; margin-left: 20px;">
+        <h1>模型训练</h1>
+      </header>
+      <div class="button">
+        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>
+      </div>
+      <div class="table-container" :key="componentKey1"><table style="width: 100%;">
+          <thead>
+            <tr>
+              <th v-for="(header, index) in mheaders" :key="'header-' + index">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in mprocessedData" :key="'row-' + index">
+              <td v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" :key="componentKey2">
+        <img src="./img/roc_curve.png" alt="" class="chart" style="background-color: #cfcfcf;">
+        <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">
+      </div>
+    </div>
 
-<!--    <footer class="footer">-->
-<!--      Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>-->
-<!--    </footer>-->
+    <!-- 用户流失率预测模块 -->
+    <div id="NewDataPrediction" class="content-section">
+      <div class="line" style="border-bottom: 1px solid #c0c0c0;"></div>
+      <header style="margin-top: 70px; margin-left: 20px;">
+        <h1>上传新数据进行预测</h1>
+      </header>
+      <div class="upload-area" @dragover.prevent="onDragOver" @drop.prevent="onFileDrop">
+        <input type="file" id="file" ref="fileInput" @change="handleFileUpload" accept=".csv" hidden>
+        <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>
+        <p v-else>{{ selectedFile.name }}</p>
+      </div>
+      <div class="button" style="margin-left: 42%;">
+        <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>
+        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
+        <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>
+      </div>
+      <div class="display-data">
+        <h3 style="margin: 0px;">文件预览: </h3>
+        <div class="file-preview-container" style="height: 300px;" :key="componentKey">
+          <table>
+            <thead>
+              <tr>
+                <th v-for="(header, index) in headers" :key="'header-' + index">{{ header }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in processedData" :key="'row-' + index">
+                <td style="color: black;" v-for="(item, idx) in row" :key="'cell-' + index + '-' + idx">{{ item }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>
+    </footer>
   </div>
 </template>
 
 <script setup>
 import { logout } from '@/net';
 import router from "@/router";
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import worldMapData from 'echarts/map/json/world.json';
+import {ref, onMounted, nextTick, watch} from 'vue';
 import { ElMessage, ElLoading } from 'element-plus';
 import { get, post } from "@/net";
 import * as echarts from 'echarts';
@@ -192,7 +187,7 @@ const images = ref([
 ]);
 let autoScrollInterval = null;
 const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
-const activeView = ref('balance_distribution'); // Currently Active View
+const activeView = ref('value_segmentation'); // Currently Active View
 const chartData = ref({}); // All data from backend
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
@@ -209,7 +204,6 @@ const componentKey = ref(0);
 const componentKey1 = ref(0);
 const componentKey2 = ref(0);
 const componentKey3 = ref(0);
-const chartInstance = ref(null); // 定义数据和图表实例
 
 
 // User profile panel
@@ -299,78 +293,6 @@ function next() {
 function prev() {
   currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
 }
-
-function initWorldMap(chart) {
-  const userData = ref(tablesx.train_geography.processedData.value.map(data => ({
-    name: data[0],  // Country name
-    value: data[1]  // User count
-})));
-  console.log(userData)
-  const option = {
-    title: {
-      text: 'Global User Distribution',
-      left: 'center',
-      top: 'top'
-    },
-    tooltip: {
-      trigger: 'item',
-      formatter: function (params) {
-        return `${params.name}: ${params.value ? params.value : 'No data'}`;
-      }
-    },
-    visualMap: {
-      type: 'piecewise',
-      pieces: [
-    { min: 90000, label: '90K+', color: '#8A0808' },
-    { min: 40000, max: 89999, label: '40K - 90K', color: '#B40404' },
-    { min: 10000, max: 39999, label: '10K - 40K', color: '#DF0101' },
-    { max: 9999, label: '<10K', color: '#FBEFEF' }
-      ],
-      left: 'left',
-      top: 'bottom',
-      textStyle: {
-        color: '#000'
-      }
-    },
-    series: [
-      {
-        name: 'Users',
-        type: 'map',
-        mapType: 'world',  // Use world map
-        roam: true,
-        center: [15, 50],  // Focus on the approximate center of Europe
-        zoom: 8,
-        data: userData.value,
-        emphasis: {
-          label: {
-            show: false
-          },
-          itemStyle: {
-            areaColor: '#c9dfaf'  // Highlight state area color
-          }
-        }
-      }
-    ]
-  };
-
-  echarts.registerMap('world', worldMapData);  // Register map data
-  chart.setOption(option);
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-  //checkDataSetStatus();
-
-  if (sessionStorage.getItem('uploadSuccess') === 'true') {
-    // Delay for a while to show the message, to ensure the page has finished loading
-    ElMessage.success('上传成功');
-      // Clear the status to prevent repeated display of the message on refresh
-      sessionStorage.removeItem('uploadSuccess');
-  }
-
-  autoScrollInterval = setInterval(next, 3000)
-
-});
 
 function toggleSidebar() {
   if (sidebarStyle.value.left === '0px') {
@@ -599,6 +521,9 @@ function handleNavigation(Id) {
   scrollTo(Id);
 }
 
+
+
+// 获取Token, 以通过Jwt验证
 axios.defaults.baseURL = '/api'; // 设置基础路径
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
@@ -610,15 +535,33 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-// 数据获取函数
-async function fetchBalanceDistribution() {
-  try {
+// 定义chartInstance
+const chartInstances = ref(null);
 
-    const response = await axios.post('/mysql/data/ads_customer_balance_distribution'); // 替换为后端接口路径
-    console.log("Now print the structure of response" + response);
+// 数据获取和可视化函数
+async function fetchDataAndRenderChart(tableName) {
+  try {
+    // 动态构建 API 路径
+    const response = await axios.post(`/mysql/data/${tableName}`);
+    console.log("Now print the structure of response", response);
+
+    // 如果接口返回的状态码是200
     if (response.data.code === 200) {
       const chartData = response.data.data; // 假设返回数据格式正确
-      renderBalanceChart(chartData);
+
+      // 根据 tableName 渲染不同的图表
+      if (tableName === 'ads_customer_balance_distribution') {
+        renderBalanceDistribution(chartData);
+      } else if (tableName === 'ads_customer_churn_rate') {
+        renderChurnRate(chartData);
+      } else if (tableName === 'ads_customer_feature_distribution') {
+        renderFeatureDistribution(chartData);
+      } else if (tableName === 'ads_customer_value_segmentation') {
+        renderValueSegmentation(chartData);
+      } else {
+        console.error('Invalid tableName:', tableName);
+      }
+
     } else {
       console.error('API Error:', response.data.message);
     }
@@ -626,9 +569,8 @@ async function fetchBalanceDistribution() {
     console.error('Fetch Error:', error);
   }
 }
-
-// 渲染图表函数
-function renderBalanceChart(data) {
+// 渲染ads_customer_balance_distribution
+function renderBalanceDistribution(data) {
   // 获取图表 DOM 容器
   const chartDom = document.getElementById('balanceChart');
   if (!chartDom) {
@@ -679,22 +621,450 @@ function renderBalanceChart(data) {
 
   chartInstance.value.setOption(option);
 }
+// 渲染ads_customer_churn_rate
+function renderChurnRate(data) {
+  // 获取图表 DOM 容器
+  const chartDom = document.getElementById('churnChart');
+  if (!chartDom) {
+    console.error('Churn Chart DOM not found');
+    return;
+  }
 
+  if (!chartInstance.value) {
+    chartInstance.value = echarts.init(chartDom);
+  }
 
+  // 从数据中提取相关字段
+  const regions = [...new Set(data.map(item => item.Geography))];  // 地理位置
+  const ageGroups = [...new Set(data.map(item => item.AgeGroup))];  // 年龄组
+  const genders = [...new Set(data.map(item => item.Gender))];  // 性别
 
-onMounted(() => {
-  fetchBalanceDistribution();
+  const churnRates = data.map(item => item.ChurnRate);  // 流失率
+  const totalCustomers = data.map(item => item.TotalCustomerCount);  // 总客户数
+  const exitedCustomers = data.map(item => item.ExitedCount);  // 流失客户数
+
+  // 配置 ECharts 图表的共用选项
+  const option = {
+    title: {
+      text: '客户流失率分析',
+      subtext: '按地区、年龄组和性别',
+      left: 'center',
+      top: '10',
+      textStyle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#2c3e50',
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: (params) => {
+        return `${params.name}<br>流失率: ${params.value}%<br>流失客户: ${exitedCustomers[params.dataIndex]}<br>总客户: ${totalCustomers[params.dataIndex]}`;
+      }
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: regions.concat(ageGroups, genders),
+      top: 'middle',
+      textStyle: {
+        color: '#34495e',
+      }
+    },
+    grid: {
+      left: '10%',
+      right: '10%',
+      bottom: '15%',
+      top: '20%',
+    },
+    xAxis: {
+      type: 'category',
+      data: regions,  // 或者根据需要使用 `ageGroups` 或 `genders`
+      axisLabel: {
+        interval: 0,
+        rotate: 30,
+        fontSize: 12,
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#2c3e50',
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '流失率 (%)',
+      axisLine: {
+        lineStyle: {
+          color: '#2c3e50',
+        }
+      },
+      axisLabel: {
+        formatter: '{value} %',
+      },
+      splitLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: '#BDC3C7',
+        }
+      }
+    },
+    series: [
+      {
+        name: '客户流失率',
+        type: 'bar',
+        data: churnRates,
+        itemStyle: {
+          color: function(params) {
+            // 通过不同的区域/年龄组/性别给不同的条形图设置颜色
+            const colorPalette = ['#2980b9', '#e74c3c', '#27ae60', '#f39c12'];
+            return colorPalette[params.dataIndex % colorPalette.length];
+          },
+        },
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c}%',
+          color: '#fff',
+          fontSize: 12,
+        },
+      },
+    ],
+  };
+
+  // 将 ECharts 配置应用到图表实例中
+  chartInstance.value.setOption(option);
+}
+// 渲染ads_customer_feature_distribution
+function renderFeatureDistribution(data) {
+  // 获取图表 DOM 容器
+  const chartDom = document.getElementById('featureChart');
+  if (!chartDom) {
+    console.error('Chart DOM not found');
+    return;
+  }
+
+  // 初始化 ECharts 实例
+  let chartInstance = echarts.getInstanceByDom(chartDom);
+  if (!chartInstance) {
+    chartInstance = echarts.init(chartDom);
+  }
+
+  // 提取性别和年龄组的分布数据
+  const genders = data.map(item => item.Gender);
+  const genderCounts = data.map(item => item.CustomerCount);
+
+  const ageGroups = data.map(item => item.AgeGroup);
+  const ageGroupCounts = data.map(item => item.CustomerCount);
+
+  // 配置 ECharts 图表
+  const option = {
+    title: {
+      text: '客户特征分布',
+      subtext: '按性别与年龄分组',
+      left: 'center',
+      textStyle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#333'
+      },
+      subtextStyle: {
+        fontSize: 14,
+        color: '#777'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} ({d}%)',
+      backgroundColor: 'rgba(50, 50, 50, 0.7)',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      textStyle: {
+        color: '#fff'
+      }
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      top: 'center',
+      data: [...new Set(genders), ...new Set(ageGroups)],
+      textStyle: {
+        color: '#444',
+        fontSize: 14
+      }
+    },
+    series: [
+      {
+        name: '性别分布',
+        type: 'pie',
+        radius: '45%',
+        center: ['25%', '50%'],
+        data: genders.map((gender, index) => ({
+          value: genderCounts[index],
+          name: gender
+        })),
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            color: '#ff7f50' // 优先显示效果
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: function(params) {
+              const colorList = ['#F44336', '#2196F3', '#4CAF50', '#FFC107'];
+              return colorList[params.dataIndex % colorList.length];
+            }
+          }
+        },
+      },
+      {
+        name: '年龄分布',
+        type: 'pie',
+        radius: '45%',
+        center: ['75%', '50%'],
+        data: ageGroups.map((ageGroup, index) => ({
+          value: ageGroupCounts[index],
+          name: ageGroup
+        })),
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            color: '#8bc34a' // 优先显示效果
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: function(params) {
+              const colorList = ['#FF5722', '#9C27B0', '#03A9F4', '#8BC34A'];
+              return colorList[params.dataIndex % colorList.length];
+            }
+          }
+        },
+      }
+    ]
+  };
+
+  // 使用配置项设置图表
+  chartInstance.setOption(option);
+}
+// 渲染ads_customer_value_segmentation
+function renderValueSegmentation(data) {
+  // 获取图表 DOM 容器
+  const chartDom = document.getElementById('valueChart');
+  if (!chartDom) {
+    console.error('Chart DOM not found');
+    return;
+  }
+
+  // 初始化 ECharts 实例
+  let chartInstance = echarts.getInstanceByDom(chartDom);
+  if (!chartInstance) {
+    chartInstance = echarts.init(chartDom);
+  }
+
+  // 提取分层数据
+  const valueSegments = data.map(item => item.ValueSegment);
+  const customerCounts = data.map(item => item.CustomerCount);
+  const avgBalances = data.map(item => item.AvgBalance);
+  const avgCreditScores = data.map(item => item.AvgCreditScore);
+  const activeRates = data.map(item => item.ActiveCustomerRate);
+  const churnRates = data.map(item => item.ChurnRate);
+
+  // 配置 ECharts 图表
+  const option = {
+    title: {
+      text: '客户价值分层分析',
+      subtext: '按客户价值段进行细分',
+      left: 'center',
+      textStyle: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#333'
+      },
+      subtextStyle: {
+        fontSize: 14,
+        color: '#777'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} ({d}%)',
+      backgroundColor: 'rgba(50, 50, 50, 0.7)',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      textStyle: {
+        color: '#fff'
+      }
+    },
+    grid: {
+      left: '10%',
+      right: '10%',
+      bottom: '10%',
+      top: '15%',
+      containLabel: true
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      top: 'center',
+      data: valueSegments,
+      textStyle: {
+        color: '#444',
+        fontSize: 14
+      }
+    },
+    series: [
+      // 饼图 - 客户数量分布
+      {
+        name: '客户数量分布',
+        type: 'pie',
+        radius: '40%',
+        center: ['25%', '50%'],
+        data: valueSegments.map((segment, index) => ({
+          value: customerCounts[index],
+          name: segment
+        })),
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            color: '#ff7f50' // 高亮效果
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: function(params) {
+              const colorList = ['#FF5722', '#9C27B0', '#03A9F4', '#4CAF50', '#FFC107'];
+              return colorList[params.dataIndex % colorList.length];
+            }
+          }
+        }
+      },
+      // 柱状图 - 平均余额 & 平均信用分数
+      {
+        name: '平均余额 & 平均信用分数',
+        type: 'bar',
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: avgBalances,
+        barWidth: 20,
+        itemStyle: {
+          color: '#2196F3'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        }
+      },
+      {
+        name: '平均信用分数',
+        type: 'bar',
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: avgCreditScores,
+        barWidth: 20,
+        itemStyle: {
+          color: '#8BC34A'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        }
+      },
+      // 折线图 - 活跃客户率 & 流失率
+      {
+        name: '活跃客户率',
+        type: 'line',
+        data: activeRates,
+        smooth: true,
+        lineStyle: {
+          color: '#FF9800'
+        },
+        symbolSize: 8,
+        itemStyle: {
+          color: '#FF9800'
+        }
+      },
+      {
+        name: '流失率',
+        type: 'line',
+        data: churnRates,
+        smooth: true,
+        lineStyle: {
+          color: '#F44336'
+        },
+        symbolSize: 8,
+        itemStyle: {
+          color: '#F44336'
+        }
+      }
+    ],
+    xAxis: [
+      {
+        type: 'category',
+        data: valueSegments,
+        axisLabel: {
+          rotate: 45,
+          textStyle: {
+            color: '#333',
+            fontSize: 14
+          }
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        name: '金额/分数',
+        axisLabel: {
+          formatter: '{value}'
+        },
+        splitLine: {
+          show: true
+        }
+      }
+    ]
+  };
+
+  // 使用配置项设置图表
+  chartInstance.setOption(option);
+}
+
+// 监听 activeView 变化, 切换回时重新渲染图表
+watch(activeView, async (newView, oldView) => {
+  if (newView === 'balance_distribution') {
+    // 在切换到 'balance_distribution' 时重新渲染图表
+    await nextTick();  // 等待 DOM 更新完成后初始化图表
+    await fetchDataAndRenderChart("ads_customer_balance_distribution");
+  } else if (oldView === 'balance_distribution') {
+    // 在离开 'balance_distribution' 时销毁图表实例
+    disposeChart();
+  }
 });
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
-// 在组件卸载时销毁图表实例
-onBeforeUnmount(() => {
+// 销毁 ECharts 实例, 保护内存
+function disposeChart() {
   if (chartInstance.value) {
     chartInstance.value.dispose();
+    chartInstance.value = null;
   }
+}
+
+onMounted(() => {
+  fetchDataAndRenderChart("ads_customer_balance_distribution");
+  fetchDataAndRenderChart("ads_customer_churn_rate");
+  fetchDataAndRenderChart("ads_customer_feature_distribution");
+  fetchDataAndRenderChart("ads_customer_value_segmentation");
 });
 
 </script>
@@ -1180,6 +1550,7 @@ ul {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   width: 80%;
   margin-left: 10%;
+  min-height: 400px;  /* 给整个块元素设置最小高度 */
 }
 
 .row {
