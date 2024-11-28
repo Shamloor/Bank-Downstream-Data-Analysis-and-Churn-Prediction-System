@@ -56,10 +56,6 @@
       </div>
     </div>
 
-    <div class="analysis-block">
-      <div id="balanceChart" class="chart" style="width: 100%; height: 400px;"></div>
-    </div>
-
     <!-- 每日数据分析可视化模块 -->
     <div v-if="!dataSetUploaded" id="DataAnalysis" class="content-section">
       <div class="line" style="border-bottom: 1px solid #c0c0c0; display: flex"></div>
@@ -652,10 +648,21 @@ function handleNavigation(defaultId, alternateId) {
     }
 }
 
+axios.defaults.baseURL = '/api'; // 设置基础路径
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`; // 设置请求头
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
 // 获取数据函数
 async function fetchBalanceDistribution() {
   try {
-    const response = await axios.post(`/api/mysql/data/ads_customer_balance_distribution`);
+    const response = await axios.post(`/mysql/data/ads_customer_balance_distribution`);
     if (response.data.code === 200) {
       const chartData = response.data.data; // 假设返回的数据格式符合需求
       renderBalanceChart(chartData);
