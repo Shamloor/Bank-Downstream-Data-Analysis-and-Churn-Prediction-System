@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 导航栏 -->
     <div class="navbar" :style="{ backgroundColor: navbarBg }">
       <div class="logo">A&P</div>
       <el-button @click="scrollTo('home')">主页</el-button>
@@ -20,6 +21,7 @@
         <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>
       </div>
     </div>
+    <!-- 主页, 包括主题文本与可视化按钮, 轮播图片, 滚动动画 -->
     <div id="home" class="content-section">
       <div id="home1">
         <section id="text">
@@ -55,6 +57,11 @@
           <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>
         </div>
       </div>
+    </div>
+
+    <!-- 修改日志实时展示模块 -->
+    <div id="RealTimeDisplay" class="content-section">
+
     </div>
 
     <!-- 每日数据分析可视化模块 -->
@@ -185,10 +192,8 @@ const images = ref([
   { src: 'src/views/img/轮播_银行入口.jpg', alt: '轮播_银行入口' },
   { src: 'src/views/img/轮播_古典银行.jpg', alt: '轮播_古典银行' }
 ]);
-let autoScrollInterval = null;
 const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
 
-const chartData = ref({}); // All data from backend
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
 const previewData = ref([]);
@@ -521,8 +526,10 @@ function handleNavigation(Id) {
   scrollTo(Id);
 }
 
+/* 修改日志实时展示部分 */
 
 
+/* 可视化部分 */
 // 获取Token, 以通过Jwt验证
 axios.defaults.baseURL = '/api'; // 设置基础路径
 axios.interceptors.request.use(config => {
@@ -538,7 +545,7 @@ axios.interceptors.request.use(config => {
 // 默认activeView
 const activeView = ref('balance_distribution'); // Currently Active View
 
-// 用一个对象存储不同的图表实例
+// 存储不同的图表实例
 const chartInstances = {
   balanceChart: null,
   churnChart: null,
@@ -1085,12 +1092,19 @@ function disposeChart(chartName) {
   }
 }
 
+// 启动时执行生命周期钩子
 onMounted(() => {
   fetchDataAndRenderChart("ads_customer_balance_distribution");
   fetchDataAndRenderChart("ads_customer_churn_rate");
   fetchDataAndRenderChart("ads_customer_feature_distribution");
   fetchDataAndRenderChart("ads_customer_value_segmentation");
 });
+
+
+
+
+
+
 
 </script>
 
@@ -1181,7 +1195,6 @@ body {
   }
 }
 
-
 .profile-panel {
   position: fixed;
   right: -300px; /* Initially hidden outside the view */
@@ -1245,6 +1258,7 @@ body {
     display: flex;
     margin-bottom: 0px;
 }
+
 #home1 #text {
   margin-top: 140px;
 }
@@ -1390,12 +1404,14 @@ ul {
   margin-left: 47%;
   margin-bottom: 0px;
 }
+
 #ModelTraining button {
   margin: 5px;
   padding: 10px 15px;
   cursor: pointer;
   border: 1px solid #666666;
 }
+
 #ModelTraining button:hover
 {
   border: 1px solid #ffd900;
@@ -1440,6 +1456,7 @@ ul {
 #NewDataPrediction{
   flex-direction: column;
 }
+
 #NewDataPrediction .upload-area {
   border: 2px dashed #ffd900;
   padding: 20px;
@@ -1470,11 +1487,13 @@ ul {
   margin-left: 30%;
   margin-bottom: 0px;
 }
+
 #NewDataPrediction button {
   margin: 5px;
   padding: 10px 15px;
   cursor: pointer;
 }
+
 #NewDataPrediction button:hover
 {
   border: 1px #ffd900;
@@ -1487,6 +1506,7 @@ ul {
 #cao{
   flex-direction: column;
 }
+
 #cao .upload-area {
   border: 2px dashed #ffd900;
   padding: 20px;
@@ -1517,11 +1537,13 @@ ul {
   margin-left: 30%;
   margin-bottom: 0px;
 }
+
 #cao button {
   margin: 5px;
   padding: 10px 15px;
   cursor: pointer;
 }
+
 #cao button:hover
 {
   border: 1px #ffd900;
@@ -1530,7 +1552,6 @@ ul {
 #NewDataPrediction input[type="file"] {
   margin-bottom: 10px;
 }
-
 
 .sidebar {
   position: fixed;
@@ -1668,6 +1689,9 @@ ul {
 }
 
 
+
+
+/* 注脚 */
 .footer {
   width: 100%;
   padding: 20px 0;
