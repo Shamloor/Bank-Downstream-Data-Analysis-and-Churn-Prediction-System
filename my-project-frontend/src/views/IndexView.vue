@@ -41,7 +41,7 @@
             </ul>
           </article>
             <div class="actions">
-              <button style="font-size: 32px; color: #ffd900; font-weight: bold; margin-left: -25px;" @click="handleNavigation('DataAnalysis', 'cao')">立刻开始全新的可视化！</button>
+              <button  @click="handleNavigation('DataAnalysis')">立刻开始全新的可视化！</button>
             </div>
         </section>
         <div class="image-slider">
@@ -1197,6 +1197,7 @@ body {
   overflow: hidden;
 }
 
+/* region 导航栏 */
 .navbar {
   position: fixed;
   top: 0;
@@ -1219,6 +1220,7 @@ body {
   padding-left: 50px;
 }
 
+/* 跳转按钮 */
 .el-button {
   background-color: transparent; /* Button background color */
   color: #fff; /* Button text color */
@@ -1239,14 +1241,7 @@ body {
   animation: blink 0.5s step-end infinite alternate; /* Click flashing effect */
 }
 
-.content-section {
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #333; /* Add a dividing line */
-  display: flex;
-}
-
+/* 用户按钮 */
 .profile-icon {
   margin-left: 35%;
   margin-right: 5%;
@@ -1262,18 +1257,26 @@ body {
   animation: click-effect 1s ease;
 }
 
+/* 点击效果 */
 @keyframes click-effect {
   0% {
     transform: scale(1);
   }
   50% {
-    transform: scale(0.95); /* Slightly shrink on press */
+    transform: scale(0.8); /* Slightly shrink on press */
   }
   100% {
     transform: scale(1);
   }
 }
 
+/* 动画效果 */
+@keyframes blink {
+  from { color: #d6c7c7; }
+  to { color: #ccc; }
+}
+
+/* 用户面板 */
 .profile-panel {
   position: fixed;
   right: -300px; /* Initially hidden outside the view */
@@ -1291,6 +1294,7 @@ body {
   text-align: center;
 }
 
+/* 用户头像 */
 .user-avatar {
   width: 50px; /* Avatar size */
   height: 50px; /* Avatar size */
@@ -1299,6 +1303,7 @@ body {
   margin-bottom: 10px;
 }
 
+/* 用户名 帮助链接 */
 .username, .help-link {
   cursor: pointer;
   width: 100%;
@@ -1310,21 +1315,30 @@ body {
   text-decoration: underline; /* Underline on hover */
 }
 
+/* endregion */
+
+/* 区域分割线 */
+.content-section {
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #f6f5f5; /* Add a dividing line */
+  display: flex;
+}
+
+/*各模块背景颜色*/
 #home { background-color: #1a1a1a; }
 #RealTimeDisplay {background-color: #2a2a2a; }
 #DataAnalysis { background-color: #3a3a3a; }
 #ModelTraining { background-color: #4a4a4a; }
 #NewDataPrediction { background-color: #5a5a5a; }
 
-@keyframes blink {
-  from { color: #d6c7c7; }
-  to { color: #ccc; }
-}
 
+/* region 主页 */
 #home {
   margin: auto;
   flex-direction: column;
-  border: 0px;
 }
 
 #home1 {
@@ -1349,66 +1363,40 @@ header h1 {
 
 header p {
     margin-bottom: 1rem;
-    font-size: 1.2rem; /* Detail description font size */
+    font-size: 1.4rem; /* Detail description font size */
 }
 
 article h2 {
-    color: #c0c0c0; /* Core features title color */
+  font-size: 1.8rem;
+    color: #f6f5f5; /* Core features title color */
 }
 
 ul {
     list-style: inside square; /* List style */
 }
 
+/* 按钮 button */
 .actions button {
     margin: 10px;
     padding: 12px 24px;
     background-color: #333;
-    border: none;
-    color: white;
+    border: solid;
+    border-color: #5a5a5a;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 30px;
+    font-size: 32px;
+    color: #ffd900;
+    font-weight: bold;
+    margin-left: -25px;
 }
 
 .actions button:hover {
     background-color: #555; /* Hover effect */
 }
 
-#ning button {
-    margin: 10px;
-    padding: 12px 24px;
-    background-color: #333;
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 30px;
-}
-
-#ning button:hover {
-    background-color: #555; /* Hover effect */
-}
-
-.dashboard-image {
-    width: 100%; /* Ensure image is fully displayed within the container */
-    margin-top: 1rem;
-}
-
-@media (max-width: 768px) {
-    .content-section {
-        padding: 10px;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    header p, .actions button {
-        font-size: 1rem;
-    }
-}
-
+/* 轮播图片 image-slider & carousel */
 .image-slider {
   flex: 1;
   width: 100%;
@@ -1438,6 +1426,7 @@ ul {
   display: block;
 }
 
+/* 滚动标签 marquee */
 .marquee {
   width: 100%;
   overflow: hidden;
@@ -1468,6 +1457,8 @@ ul {
     transform: translateX(-50%);
   }
 }
+
+/* endregion */
 
 #DataAnalysis {
   margin: auto;
@@ -1582,9 +1573,11 @@ ul {
   margin-bottom: 10px;
 }
 
+
 #cao{
   flex-direction: column;
 }
+
 
 #cao .upload-area {
   border: 2px dashed #ffd900;
@@ -1851,6 +1844,51 @@ ul {
   border-top: 1px solid #c0c0c0; /* Add a top border to differentiate the content */
 }
 th {text-align: center;}
+/* endregion */
+
+/* region 不知道干什么用 */
+/*
+#ning button {
+    margin: 100px;
+    padding: 12px 24px;
+    background-color: #333;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 30px;
+}
+*/
+
+/*
+#ning button:hover {
+    background-color: #555;
+}
+*/
+
+/*
+.dashboard-image {
+    width: 100%;
+    margin-top: 1rem;
+}
+*/
+
+/*
+@media (max-width: 768px) {
+    .content-section {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    header p, .actions button {
+        font-size: 1rem;
+    }
+}
+*/
+
 /* endregion */
 </style>
 
