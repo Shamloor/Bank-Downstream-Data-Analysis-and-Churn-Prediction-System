@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <!-- 打开右上角的用户图标 -->
+    <!-- 用户面板(打开右上角的用户图标) -->
     <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">
       <div class="profile-content">
         <img src="./img/用户头像.jpg" alt="User Avatar" class="user-avatar"/>
@@ -159,7 +159,7 @@
         <p v-if="!selectedFile">将文件拖拽到这里或<span class="upload-link" @click="triggerXFileInput">选择一个文件</span></p>
         <p v-else>{{ selectedFile.name }}</p>
       </div>
-      <div class="button" style="margin-left: 42%;">
+      <div class="p-button" style="margin-left: 42%;">
         <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>
         <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
         <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>
@@ -1189,13 +1189,33 @@ onMounted(() => {
 
 
 <style scoped>
-/* General font and background color adjustments */
+
+/* region 整体布局 */
+/* 字体与颜色 */
 body {
   font-family: 'Arial', sans-serif;
   color: #fff;
   background-color: #121212;
   overflow: hidden;
 }
+
+/* 区域分割线 */
+.content-section {
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #2e2a2a; /* Add a dividing line */
+  display: flex;
+}
+
+/* 各模块背景颜色 */
+#home { background-color: #1a1a1a; }
+#RealTimeDisplay {background-color: #2a2a2a; }
+#DataAnalysis { background-color: #3a3a3a; }
+#ModelTraining { background-color: #4a4a4a; }
+#NewDataPrediction { background-color: #5a5a5a; }
+/* endregion */
 
 /* region 导航栏 */
 .navbar {
@@ -1317,24 +1337,6 @@ body {
 
 /* endregion */
 
-/* 区域分割线 */
-.content-section {
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #f6f5f5; /* Add a dividing line */
-  display: flex;
-}
-
-/*各模块背景颜色*/
-#home { background-color: #1a1a1a; }
-#RealTimeDisplay {background-color: #2a2a2a; }
-#DataAnalysis { background-color: #3a3a3a; }
-#ModelTraining { background-color: #4a4a4a; }
-#NewDataPrediction { background-color: #5a5a5a; }
-
-
 /* region 主页 */
 #home {
   margin: auto;
@@ -1343,13 +1345,13 @@ body {
 
 #home1 {
   max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-    color: #fff;
-    box-sizing: border-box;
-    margin-top: -30px;
-    display: flex;
-    margin-bottom: 0px;
+  margin: auto;
+  padding: 20px;
+  color: #fff;
+  box-sizing: border-box;
+  margin-top: -30px;
+  display: flex;
+  margin-bottom: 0px;
 }
 
 #home1 #text {
@@ -1357,43 +1359,43 @@ body {
 }
 
 header h1 {
-    font-size: 2rem; /* Adjust title font size */
-    color: #ffd900; /* Highlight the title */
+  font-size: 2rem; /* Adjust title font size */
+  color: #ffd900; /* Highlight the title */
 }
 
 header p {
-    margin-bottom: 1rem;
-    font-size: 1.4rem; /* Detail description font size */
+  margin-bottom: 1rem;
+  font-size: 1.4rem; /* Detail description font size */
 }
 
 article h2 {
   font-size: 1.8rem;
-    color: #f6f5f5; /* Core features title color */
+  color: #f6f5f5; /* Core features title color */
 }
 
 ul {
-    list-style: inside square; /* List style */
+  list-style: inside square; /* List style */
 }
 
 /* 按钮 button */
 .actions button {
-    margin: 10px;
-    padding: 12px 24px;
-    background-color: #333;
-    border: solid;
-    border-color: #5a5a5a;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 30px;
-    font-size: 32px;
-    color: #ffd900;
-    font-weight: bold;
-    margin-left: -25px;
+  margin: 10px;
+  padding: 12px 24px;
+  background-color: #333;
+  border: solid;
+  border-color: #5a5a5a;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 30px;
+  font-size: 32px;
+  color: #ffd900;
+  font-weight: bold;
+  margin-left: -25px;
 }
 
 .actions button:hover {
-    background-color: #555; /* Hover effect */
+  background-color: #555; /* Hover effect */
 }
 
 /* 轮播图片 image-slider & carousel */
@@ -1430,7 +1432,7 @@ ul {
 .marquee {
   width: 100%;
   overflow: hidden;
- /* Dark background for contrast */
+  /* Dark background for contrast */
   color: #fff;
   white-space: nowrap;
   position:relative;
@@ -1459,315 +1461,6 @@ ul {
 }
 
 /* endregion */
-
-#DataAnalysis {
-  margin: auto;
-  flex-direction: column;
-}
-
-#ModelTraining {
-  margin: auto;
-  flex-direction: column;
-}
-
-#ModelTraining .button {
-  margin-left: 47%;
-  margin-bottom: 0px;
-}
-
-#ModelTraining button {
-  margin: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  border: 1px solid #666666;
-}
-
-#ModelTraining button:hover
-{
-  border: 1px solid #ffd900;
-}
-
-#ModelTraining .results-container {
-    display: flex;
-    margin-top: 20px;
-    border: 2px dashed #666666;
-}
-
-#ModelTraining .results-table {
-    flex: 1;
-    padding-right: 20px;
-    margin-top: 80px;
-    width: 200px;
-    margin-right: 0px;
-    margin-left: 40px;
-}
-
-#ModelTraining .results-chart {
-    flex: 2;
-    margin-left: -200px;
-    margin-top: 40px
-}
-
-#ModelTraining table {
-    width: 200px;
-    border-collapse: collapse;
-}
-
-#ModelTraining th, td {
-    border: 1px solid #ffd900;
-    padding: 8px;
-    text-align: left;
-}
-
-#ModelTraining th {
-    background-color: #666666;
-}
-
-#NewDataPrediction{
-  flex-direction: column;
-}
-
-#NewDataPrediction .upload-area {
-  border: 2px dashed #ffd900;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  width: 40%;
-  height: 100px;
-  margin: 20px;
-  margin-left: 30%;
-}
-
-#NewDataPrediction .upload-area:hover {
-  background-color: #757575;
-}
-
-#NewDataPrediction .upload-link {
-  color: blue;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-#NewDataPrediction .display-data {
-  margin: 20px;
-}
-
-#NewDataPrediction .button {
-  margin-left: 30%;
-  margin-bottom: 0px;
-}
-
-#NewDataPrediction button {
-  margin: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-#NewDataPrediction button:hover
-{
-  border: 1px #ffd900;
-}
-
-#NewDataPrediction input[type="file"] {
-  margin-bottom: 10px;
-}
-
-
-#cao{
-  flex-direction: column;
-}
-
-
-#cao .upload-area {
-  border: 2px dashed #ffd900;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  width: 40%;
-  height: 100px;
-  margin: 20px;
-  margin-left: 30%;
-}
-
-#cao .upload-area:hover {
-  background-color: #757575;
-}
-
-#cao .upload-link {
-  color: blue;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-#cao .display-data {
-  margin: 20px;
-}
-
-#cao .button {
-  margin-left: 30%;
-  margin-bottom: 0px;
-}
-
-#cao button {
-  margin: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-#cao button:hover
-{
-  border: 1px #ffd900;
-}
-
-#NewDataPrediction input[type="file"] {
-  margin-bottom: 10px;
-}
-
-.sidebar {
-  position: fixed;
-  left: -270px;
-  top: 350px;
-  bottom: 0;
-  width: 150px;
-  height: 224px;
-  background-color: #333;
-  transition: left 0.3s;
-  z-index: 1002;
-  opacity: 80%;
-  overflow-y: auto;
-  padding: 10px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.sidebar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.sidebar-btn {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #555;
-  background-color: #444;
-  color: white;
-  text-align: left;
-  margin-bottom: 5px;
-  transition: background-color 0.3s;
-  cursor: pointer;
-}
-
-.analysis-block {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border-radius: 8px;
-  width: 90%;
-  min-height: 550px;  /* 给整个块元素设置最小高度 */
-  margin: 0 auto;  /* 水平居中 */
-}
-
-.train-chart {
-  width: 45%;
-  height: 600px;
-  object-fit: contain;
-  margin: 5px;
-  flex: 1;
-  background-color: #7a7a7a;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.chart {
-  width: 100%;
-  height: 800px;
-  object-fit: contain;
-  margin: 5px;
-  flex: 1;
-  background-color: #7a7a7a;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.table-container {
-  flex: 1;
-  margin: 5px;
-  background-color: #444;
-  padding: 10px;
-  border-radius: 8px;
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: 100%;
-  min-height: 0px;
-}
-
-.table-container table {
-  width: 100%; /* Table width is 100% */
-  border-collapse: collapse; /* Borders are collapsed into a single border */
-}
-
-.table-container th, td {
-  border: 1px solid #000000; /* Cell border */
-  text-align: center;
-  padding: 8px; /* Text alignment to the left */
-}
-
-.sidebar-btn:hover {
-  background-color: #555;
-}
-
-.toggle-sidebar-button:hover {
-  border: 1px solid #ffd900;
-}
-
-.file-preview-container {
-  max-height: 300px; /* Or adjust the height as needed */
-  overflow-y: auto; /* Display vertical scrollbar */
-  background-color: #dadada; /* Background color */
-  border: 1px solid #ccc; /* Border style */
-  margin-top: 10px; /* Top margin */
-  width: auto; /* Automatic width to fit content */
-  color: #000000;
-}
-
-.file-preview-container table {
-  width: 100%; /* Table width is 100% */
-  table-layout: fixed; /* Fixed table layout so columns are evenly distributed */
-  border-collapse: collapse; /* Borders are collapsed into a single border */
-}
-
-.file-preview-container th, td {
-  border: 1px solid #000000; /* Cell border */
-  padding: 8px; /* Cell padding */
-  text-align: left; /* Text alignment to the left */
-  word-wrap: break-word; /* Allow word wrapping within cells */
-}
-
-.file-preview-container th {
-  background-color: #a8a8a8; /* Table header background color */
-}
-
-/* Responsive font sizes */
-@media (max-width: 600px) {
-  th, td {
-    font-size: 3vw; /* Adjust font size for small screens */
-  }
-}
-
-/* Increase font size appropriately on large screens */
-@media (min-width: 601px) {
-  th, td {
-    font-size: 0.9em; /* Fixed font size for large screens */
-  }
-}
 
 /* region 修改日志实时展示 */
 .message-container {
@@ -1829,6 +1522,313 @@ ul {
   100% {
     background-color: #fff; /* 结束颜色 */
   }
+}
+/* endregion */
+
+/* region 数据分析 */
+#DataAnalysis {
+  margin: auto;
+  flex-direction: column;
+}
+
+.sidebar {
+  position: fixed;
+  left: -270px;
+  top: 350px;
+  bottom: 0;
+  width: 150px;
+  height: 224px;
+  background-color: #333;
+  transition: left 0.3s;
+  z-index: 1002;
+  opacity: 80%;
+  overflow-y: auto;
+  padding: 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-btn {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: white;
+  text-align: left;
+  margin-bottom: 5px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.analysis-block {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  width: 90%;
+  min-height: 550px;  /* 给整个块元素设置最小高度 */
+  margin: 0 auto;  /* 水平居中 */
+}
+
+.chart {
+  width: 100%;
+  height: 800px;
+  object-fit: contain;
+  margin: 5px;
+  flex: 1;
+  background-color: #7a7a7a;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.sidebar-btn:hover {
+  background-color: #555;
+}
+
+.toggle-sidebar-button:hover {
+  border: 1px solid #ffd900;
+}
+/* endregion */
+
+/* region 模型训练 */
+#ModelTraining {
+  margin: auto;
+  flex-direction: column;
+}
+
+#ModelTraining .button {
+  margin-left: 47%;
+  margin-bottom: 0px;
+}
+
+#ModelTraining button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 1px solid #666666;
+}
+
+#ModelTraining button:hover
+{
+  border: 1px solid #ffd900;
+}
+
+#ModelTraining .results-container {
+  display: flex;
+  margin-top: 20px;
+  border: 2px dashed #666666;
+}
+
+#ModelTraining .results-table {
+  flex: 1;
+  padding-right: 20px;
+  margin-top: 80px;
+  width: 200px;
+  margin-right: 0px;
+  margin-left: 40px;
+}
+
+#ModelTraining .results-chart {
+  flex: 2;
+  margin-left: -200px;
+  margin-top: 40px
+}
+
+#ModelTraining table {
+  width: 200px;
+  border-collapse: collapse;
+}
+
+#ModelTraining th, td {
+  border: 1px solid #ffd900;
+  padding: 8px;
+  text-align: left;
+}
+
+#ModelTraining th {
+  background-color: #666666;
+}
+
+.train-chart {
+  width: 45%;
+  height: 600px;
+  object-fit: contain;
+  margin: 5px;
+  flex: 1;
+  background-color: #7a7a7a;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  flex: 1;
+  margin: 5px;
+  background-color: #444;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 100%;
+  min-height: 0px;
+}
+
+.table-container th, td {
+  border: 1px solid #000000; /* Cell border */
+  text-align: center;
+  padding: 8px; /* Text alignment to the left */
+}
+
+.table-container table {
+  width: 100%; /* Table width is 100% */
+  border-collapse: collapse; /* Borders are collapsed into a single border */
+}
+/* endregion */
+
+/* region 预测新数据 */
+#NewDataPrediction{
+  flex-direction: column;
+}
+
+#NewDataPrediction .upload-area {
+  border: 2px dashed #ffd900;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  width: 40%;
+  height: 100px;
+  margin: 20px;
+  margin-left: 30%;
+}
+
+#NewDataPrediction .upload-area:hover {
+  background-color: #757575;
+}
+
+#NewDataPrediction .upload-link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#NewDataPrediction .display-data {
+  margin: 20px;
+}
+
+#NewDataPrediction .button {
+  margin-left: 30%;
+  margin-bottom: 0px;
+}
+
+#NewDataPrediction button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+#NewDataPrediction button:hover
+{
+  border: 1px #ffd900;
+}
+
+#NewDataPrediction input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.upload-area {
+  border: 2px dashed #ffd900;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  width: 40%;
+  height: 100px;
+  margin: 20px;
+  margin-left: 30%;
+}
+
+.upload-area:hover {
+  background-color: #757575;
+}
+
+.upload-link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.display-data {
+  margin: 20px;
+}
+
+.p-button {
+  margin-left: 30%;
+  margin-bottom: 0px;
+}
+
+p-button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+p-button:hover
+{
+  border: 1px #ffd900;
+}
+
+#NewDataPrediction input[type="file"] {
+  margin-bottom: 10px;
+}
+
+/* 表格元素大小调整 */
+@media (max-width: 600px) {
+  th, td {
+    font-size: 3vw;
+  }
+}
+@media (min-width: 601px) {
+  th, td {
+    font-size: 0.9em;
+  }
+}
+
+.file-preview-container {
+  max-height: 300px; /* Or adjust the height as needed */
+  overflow-y: auto; /* Display vertical scrollbar */
+  background-color: #dadada; /* Background color */
+  border: 1px solid #ccc; /* Border style */
+  margin-top: 10px; /* Top margin */
+  width: auto; /* Automatic width to fit content */
+  color: #000000;
+}
+
+.file-preview-container table {
+  width: 100%; /* Table width is 100% */
+  table-layout: fixed; /* Fixed table layout so columns are evenly distributed */
+  border-collapse: collapse; /* Borders are collapsed into a single border */
+}
+
+.file-preview-container th, td {
+  border: 1px solid #000000; /* Cell border */
+  padding: 8px; /* Cell padding */
+  text-align: left; /* Text alignment to the left */
+  word-wrap: break-word; /* Allow word wrapping within cells */
+}
+
+.file-preview-container th {
+  background-color: #a8a8a8; /* Table header background color */
 }
 /* endregion */
 
