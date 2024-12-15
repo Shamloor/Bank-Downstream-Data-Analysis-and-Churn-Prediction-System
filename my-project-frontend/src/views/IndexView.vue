@@ -12,6 +12,7 @@
         <img src="./img/个人中心.png" style="max-width: 50%; max-height: 50%; width: auto; height: auto;">
       </div>
     </div>
+
     <!-- 打开右上角的用户图标 -->
     <div class="profile-panel" :style="{ right: profilePanelStyle.right, backgroundColor: navbarBg }">
       <div class="profile-content">
@@ -21,6 +22,7 @@
         <el-button @click="userLogout" style="width: 100%; font-size: large;">Logout</el-button>
       </div>
     </div>
+
     <!-- 主页, 包括主题文本与可视化按钮, 轮播图片, 滚动动画 -->
     <div id="home" class="content-section">
       <div id="home1">
@@ -61,7 +63,25 @@
 
     <!-- 修改日志实时展示模块 -->
     <div id="RealTimeDisplay" class="content-section">
-
+      <div class="line" style="border-bottom: 1px solid #f6f5f5; display: flex"></div>
+      <header style="margin-top: 70px; margin-left: 20px; display: flex; justify-content: space-between;">
+        <h1>实时可视</h1>
+      </header>
+      <div class="message-container">
+        <div class="data-list">
+          <transition-group name="list" tag="div" mode="out-in">
+            <!-- 仅显示 newItem.data -->
+            <div
+                v-for="(item, index) in dataList"
+                :key="item.id"
+                class="data-item"
+                :class="{ 'highlight': item.changed }"
+            >
+              {{ item.data }}
+            </div>
+          </transition-group>
+        </div>
+      </div>
     </div>
 
     <!-- 每日数据分析可视化模块 -->
@@ -123,8 +143,8 @@
         </table>
       </div>
       <div class="row" :key="componentKey2">
-        <img src="./img/roc_curve.png" alt="" class="chart" style="background-color: #cfcfcf;">
-        <img src="./img/feature_importances.png" alt="" class="chart" style="background-color: #cfcfcf;">
+        <img src="./img/roc_curve.png" alt="" class="train-chart" style="background-color: #cfcfcf;">
+        <img src="./img/feature_importances.png" alt="" class="train-chart" style="background-color: #cfcfcf;">
       </div>
     </div>
 
@@ -163,6 +183,7 @@
       </div>
     </div>
 
+    <!-- 注脚 -->
     <footer class="footer">
       Produced on the Chrome | Contact: <a href="mailto:1301585528@qq.com">1301585528@qq.com</a>
     </footer>
@@ -179,10 +200,11 @@ import * as echarts from 'echarts';
 import axios from 'axios';
 
 
-const showProfilePanel = ref(false);
-const profilePanelStyle = ref({right: '-300px'});  // Control panel style
+
 const activeSection = ref('home');  // Initial active section value
 const navbarBg = ref('#1a1a1a');  // Set initial color based on the initial active section
+
+/* 轮播图片 */
 const currentIndex = ref(0);
 const startX = ref(0);
 const threshold = 50;
@@ -192,7 +214,7 @@ const images = ref([
   { src: 'src/views/img/轮播_银行入口.jpg', alt: '轮播_银行入口' },
   { src: 'src/views/img/轮播_古典银行.jpg', alt: '轮播_古典银行' }
 ]);
-const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
+
 
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
@@ -210,6 +232,9 @@ const componentKey1 = ref(0);
 const componentKey2 = ref(0);
 const componentKey3 = ref(0);
 
+// region 用户面板
+const showProfilePanel = ref(false);
+const profilePanelStyle = ref({right: '-300px'});  // Control panel style
 
 // User profile panel
 function toggleProfilePanel() {
@@ -224,6 +249,7 @@ function toggleProfilePanel() {
 function userLogout() {
   logout(() => router.push("/"))
 }
+// endregion
 
 function scrollTo(elementId) {
   activeSection.value = elementId;  // Update active section
@@ -526,10 +552,7 @@ function handleNavigation(Id) {
   scrollTo(Id);
 }
 
-/* 修改日志实时展示部分 */
 
-
-/* 可视化部分 */
 // 获取Token, 以通过Jwt验证
 axios.defaults.baseURL = '/api'; // 设置基础路径
 axios.interceptors.request.use(config => {
@@ -541,6 +564,67 @@ axios.interceptors.request.use(config => {
 }, error => {
   return Promise.reject(error);
 });
+
+// region 修改日志实时展示
+// 数据
+const dataList = ref([]);
+let lastData = null;  // 用于存储上一次的响应数据
+
+// 从后端获取数据
+const fetchData = async () => {
+  try {
+    const response = await axios.get('/update');
+
+    // 存在时打印 response.data
+    console.log('Response data:', response.data);
+
+    // 如果数据与上次相同，跳过这次更新
+    if (JSON.stringify(response.data.data) === JSON.stringify(lastData)) {
+      console.log('数据没有变化，跳过更新');
+      return;
+    }
+
+    // 更新 lastData
+    lastData = response.data.data;
+
+    if (response.data) {
+      const newItem = {
+        code: response.data.code,
+        data: response.data.data,
+        id: response.data.id,
+        message: response.data.message,
+        changed: true, // 标记数据变化
+      };
+
+      console.log("data为" + newItem.data);
+
+      dataList.value.unshift(newItem); // 插入新数据到最前面
+
+      console.log("Latest item in dataList:" + dataList.value[0]);
+
+      // 高亮展示后去掉变化标记
+      setTimeout(() => {
+        newItem.changed = false;
+      }, 1000); // 保持高亮1秒
+
+      // 限制数据长度，避免无限增长
+      if (dataList.value.length > 8) {
+        dataList.value.pop();
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+// 每隔5秒从后端获取新数据
+onMounted(() => {
+  setInterval(fetchData, 3000);
+});
+// endregion
+
+// region 可视化
+const sidebarStyle = ref({ left: '-270px' });  // Control sidebar style
 
 // 默认activeView
 const activeView = ref('balance_distribution'); // Currently Active View
@@ -1099,12 +1183,7 @@ onMounted(() => {
   fetchDataAndRenderChart("ads_customer_feature_distribution");
   fetchDataAndRenderChart("ads_customer_value_segmentation");
 });
-
-
-
-
-
-
+// endregion
 
 </script>
 
@@ -1590,13 +1669,22 @@ ul {
 .analysis-block {
   display: flex;
   flex-direction: column;
-  background-color: #333;
   padding: 10px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  width: 80%;
-  margin-left: 10%;
-  min-height: 400px;  /* 给整个块元素设置最小高度 */
+  width: 90%;
+  min-height: 550px;  /* 给整个块元素设置最小高度 */
+  margin: 0 auto;  /* 水平居中 */
+}
+
+.train-chart {
+  width: 45%;
+  height: 600px;
+  object-fit: contain;
+  margin: 5px;
+  flex: 1;
+  background-color: #7a7a7a;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .row {
@@ -1607,7 +1695,7 @@ ul {
 
 .chart {
   width: 100%;
-  height: 400px;
+  height: 800px;
   object-fit: contain;
   margin: 5px;
   flex: 1;
@@ -1688,10 +1776,70 @@ ul {
   }
 }
 
+/* region 修改日志实时展示 */
+.message-container {
+  max-width: 1500px;
+  margin: 150px 0 auto;
+  padding: 20px;
+  background-color: #2e2a2a;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(104, 10, 10, 0.1);
+}
 
+.data-list {
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 800px;
 
+  overflow-y: auto; /* 支持垂直滚动 */
+  overflow-x: auto; /* 支持水平滚动 */
+  white-space: nowrap; /* 确保所有子容器在同一行内滚动 */
+}
 
-/* 注脚 */
+/* 仅隐藏Y轴滚动条 */
+.data-list::-webkit-scrollbar:horizontal {
+  display: block; /* 保留水平滚动条 */
+}
+
+.data-list::-webkit-scrollbar:vertical {
+  display: none; /* 隐藏垂直滚动条 */
+}
+
+.data-item {
+  padding: 20px;
+  margin: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 1s ease, transform 0.6s;
+
+  white-space: nowrap; /* 强制单行显示 */
+  overflow: hidden; /* 隐藏超出的内容 */
+  text-overflow: ellipsis; /* 超出显示省略号 */
+  min-width: fit-content; /* 子容器宽度根据内容扩展 */
+}
+
+/* 高亮变化的部分 */
+.data-item.highlight {
+  animation: highlightAnimation 1s forwards;
+  transform: scale(1.00);
+}
+
+/* 渐变色动画 */
+@keyframes highlightAnimation {
+  0% {
+    background-color: #fff; /* 起始颜色 */
+  }
+  50% {
+    background-color: #ffeb3b; /* 中间渐变颜色 */
+  }
+  100% {
+    background-color: #fff; /* 结束颜色 */
+  }
+}
+/* endregion */
+
+/* region 网页注脚 */
 .footer {
   width: 100%;
   padding: 20px 0;
@@ -1703,5 +1851,6 @@ ul {
   border-top: 1px solid #c0c0c0; /* Add a top border to differentiate the content */
 }
 th {text-align: center;}
+/* endregion */
 </style>
 

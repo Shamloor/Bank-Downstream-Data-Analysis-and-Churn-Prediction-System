@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 @RestController
@@ -18,12 +17,12 @@ public class UpdateController {
     private UpdateService updateService;
 
     /**
-     * 提供给前端的接口，返回所有收到的消息
-     * @return 返回包含消息列表的响应数据
+     * 提供给前端的接口，返回最新一条消息
+     * @return 返回包含最新消息的响应数据
      */
     @GetMapping
-    public RestBean<List<String>> getLatestUpdates() {
-        return messageHandle(() -> updateService.getLatestUpdates());
+    public RestBean<String> getLatestUpdate() {
+        return messageHandle(() -> updateService.getLatestMessage());
     }
 
     /**

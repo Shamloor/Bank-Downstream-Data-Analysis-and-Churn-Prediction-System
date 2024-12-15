@@ -17,8 +17,12 @@ public class UpdateService {
         updateMessages.add(modifiedMessage); // 将消息添加到本地列表中
     }
 
-    // 提供一个方法让Controller访问最新的消息
-    public List<String> getLatestUpdates() {
-        return updateMessages; // 获取所有存储的消息
+    // 返回最新一条消息
+    public String getLatestMessage() {
+        if (!updateMessages.isEmpty()) {
+            return updateMessages.get(updateMessages.size() - 1); // 返回最后一条消息
+//            return updateMessages.get(0); // 返回最后一条消息
+        }
+        return null; // 如果没有消息，返回 null
     }
 }
