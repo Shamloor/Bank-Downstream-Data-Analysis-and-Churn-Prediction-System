@@ -11,8 +11,7 @@ public class UpdateService {
     private List<String> updateMessages = new ArrayList<>();
 
     public void processMessage(String message) {
-        //String modifiedMessage = message.replaceAll("\\\\", "");
-        String modifiedMessage = message;
+        String modifiedMessage = message.replaceAll("\\\\", "");
         System.out.println("Received message: " + modifiedMessage);
 
         updateMessages.add(modifiedMessage); // 将消息添加到本地列表中

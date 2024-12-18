@@ -41,7 +41,7 @@
             </ul>
           </article>
             <div class="actions">
-              <button  @click="handleNavigation('DataAnalysis')">立刻开始全新的可视化！</button>
+              <button  @click="sshcommand('/home/niit/bin/everyday_update.sh today > /home/niit/bin/new_everyday.log')">立刻开始全新的可视化！</button>
             </div>
         </section>
         <div class="image-slider">
@@ -199,6 +199,17 @@ import { get, post } from "@/net";
 import * as echarts from 'echarts';
 import axios from 'axios';
 
+// 获取Token, 以通过Jwt验证
+axios.defaults.baseURL = '/api'; // 设置基础路径
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`; // 设置请求头
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
 
 
 const activeSection = ref('home');  // Initial active section value
@@ -407,7 +418,7 @@ function sshcommand(command) {
   formData.append('command', command);
 
   // Use the enhanced post request
-  enhancedPost('/api/ssh/command', formData, () => {
+  enhancedPost('/ssh/command', formData, () => {
     sessionStorage.setItem('uploadSuccess', 'true');
     ElMessage.success('visual successful');
     location.reload();
@@ -425,12 +436,6 @@ function uploadFile() {
                 ElMessage.success('Upload successful')
             });
 
-}
-
-// Execute all shell scripts
-function xxxx() {
-  uploadUserFile()
-  sshcommand("training/shell/exec_visual.sh");
 }
 
 function uploadUserFile() {
@@ -553,17 +558,7 @@ function handleNavigation(Id) {
 }
 
 
-  // 获取Token, 以通过Jwt验证
-  axios.defaults.baseURL = '/api'; // 设置基础路径
-  axios.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // 设置请求头
-    }
-    return config;
-  }, error => {
-    return Promise.reject(error);
-  });
+
 
 // region 修改日志实时展示
 // 数据

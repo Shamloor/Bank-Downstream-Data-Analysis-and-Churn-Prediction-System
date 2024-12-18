@@ -30,20 +30,20 @@ public class SSHController {
         return ResponseEntity.ok(
                 messageHandle(() -> {
                     sshService.sshcll(command);
-                    return "Training successfully!";  // 返回成功的消息
+                    return "执行成功";  // 返回成功的消息
                 })
         );
     }
 
-    @GetMapping("/status/{filename:.+}")
-    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String filename) {
-        return ResponseEntity.ok(
-                messageHandle(() -> sshService.statuscll(filename))  // 返回文件内容
-        );
-    }
+//    @GetMapping("/status/{filename:.+}")
+//    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String filename) {
+//        return ResponseEntity.ok(
+//                messageHandle(() -> sshService.statuscll(filename))  // 返回文件内容
+//        );
+//    }
 
-    @GetMapping("/train/{filename:.+}")
-    public ResponseEntity<RestBean<String>> executeSSHPredict(@PathVariable String filename) {
+    @GetMapping("/training")
+    public ResponseEntity<RestBean<String>> executeSSHPredict(@RequestParam("command") String command) {
         return ResponseEntity.ok(
                 messageHandle(() -> {
                     sshService.sshcll("model_training.sh");
