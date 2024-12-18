@@ -161,7 +161,7 @@
       </div>
       <div class="p-button" style="margin-left: 42%;">
         <button @click="uploadFile" :disabled="!selectedFile" style="border: 0px;">上传</button>
-        <button @click="downloadFile" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
+        <button @click="sshcommand('/home/niit/bin/prediction.sh > /home/niit/bin/prediction.log')" :disabled="!selectedFile" style="border: 0px;">开始预测</button>
         <button @click="go" :disabled="!selectedFile" style="border: 0px;">下载结果</button>
       </div>
       <div class="display-data">
@@ -433,7 +433,7 @@ function uploadFile() {
   const formData = new FormData();
   formData.append('file', selectedFile.value);  // selectedFile.value is the file you got from <input type="file">
 
-  post('/files/upload', formData
+  post('/ssh/upload', formData
   , () => {
                 ElMessage.success('Upload successful')
             });
@@ -464,7 +464,7 @@ function downloadFile() {
     background: 'rgba(0, 0, 0, 0.7)'
   });
 
-  get(`/api/files/download/${filename}`, 
+  get(`/files/download/${filename}`,
     (data) => {
 
         const lines = data.split('\n');

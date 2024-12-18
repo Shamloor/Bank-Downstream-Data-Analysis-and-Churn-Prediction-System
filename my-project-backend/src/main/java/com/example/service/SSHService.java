@@ -118,6 +118,7 @@ public class SSHService {
             session.disconnect();
 
             System.out.println("File uploaded to remote successfully");
+            return;
         } catch (JSchException | SftpException | IOException e) {
             throw new RuntimeException("Failed to upload file to remote server.", e);
         }
