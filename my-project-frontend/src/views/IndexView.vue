@@ -422,7 +422,13 @@ function sshcommand(command) {
   enhancedPost('/ssh/command', formData, () => {
     sessionStorage.setItem('uploadSuccess', 'true');
     ElMessage.success('visual successful');
-    location.reload();
+
+    // 如果command是特定命令，则调用downloadFile()并且不刷新页面
+    if (command === '/home/niit/bin/prediction.sh > /home/niit/bin/prediction.log') {
+      downloadFile();  // 调用 downloadFile 函数
+    } else {
+      location.reload();  // 否则重新加载整个页面
+    }
   });
 }
 

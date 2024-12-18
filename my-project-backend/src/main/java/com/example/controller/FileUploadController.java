@@ -36,11 +36,9 @@ public class FileUploadController {
     public ResponseEntity<RestBean<String>> downloadFile(@PathVariable String filename) {
         return ResponseEntity.ok(
                 messageHandle(() -> {
-                    sshService.sshcll("training/shell/spark/predict.sh");
-                    List<String> fileNames = List.of("Predictions.csv");
-                    String remoteDirectory = "/home/willson/training/shell/spark/";
-                    String localDirectory = "D:/VSCode/SpringBoot-Vue-Template-Jwt-main/my-project-frontend/src/views/img";
-
+                    List<String> fileNames = List.of("predictions.csv");
+                    String remoteDirectory = "/home/niit/bin/";
+                    String localDirectory = "D:/Programming/Front-End-Modified/my-project-frontend/src/views/files";
                     try {
                         sshService.downloadFiles(fileNames, remoteDirectory, localDirectory);
                     } catch (JSchException e) {
