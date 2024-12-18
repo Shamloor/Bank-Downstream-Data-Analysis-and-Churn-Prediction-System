@@ -427,7 +427,7 @@ function sshcommand(command) {
     if (command === '/home/niit/bin/prediction.sh > /home/niit/bin/prediction.log') {
       downloadFile();  // 调用 downloadFile 函数
     } else {
-      location.reload();  // 否则重新加载整个页面
+      location.reload();  // 否则重新加载页面
     }
   });
 }
@@ -1659,7 +1659,7 @@ ul {
 
 .train-chart {
   width: 45%;
-  height: 600px;
+  height: 500px;
   object-fit: contain;
   margin: 5px;
   flex: 1;

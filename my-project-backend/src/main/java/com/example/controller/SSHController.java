@@ -46,7 +46,7 @@ public class SSHController {
                     } else if (command.equals("/home/niit/bin/model_training.sh > /home/niit/bin/model_training.log")) {
                         sshService.sshcll(command);  // 执行 model_training.sh
                         // 添加文件下载逻辑
-                        List<String> fileNames = Arrays.asList("merged_evaluation.csv", "roc_curve.png", "feature_importances.png");
+                        List<String> fileNames = Arrays.asList("roc_curve.png", "feature_importances.png");
                         String remoteDirectory = "/home/niit/";
                         String localDirectory = "D:/Programming/Front-End-Modified/my-project-frontend/src/views/img";
                         try {
