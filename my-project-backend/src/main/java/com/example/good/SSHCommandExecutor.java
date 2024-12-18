@@ -60,7 +60,7 @@ public class SSHCommandExecutor {
 //        String host = "niit01"; // 远程主机IP地址
 //        String user = "niit";   // SSH登录用户名
 //        String password = "123456"; // SSH登录密码
-//        String command = "echo hello";  // 要执行的CMD命令
+//        String command = "/home/niit/bin/model_training.sh > /home/niit/bin/model_training.log";  // 要执行的CMD命令
 //
 //        try {
 //            JSch jsch = new JSch();

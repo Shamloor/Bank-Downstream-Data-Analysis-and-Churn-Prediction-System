@@ -41,7 +41,7 @@
             </ul>
           </article>
             <div class="actions">
-              <button  @click="sshcommand('/home/niit/bin/everyday_update.sh today > /home/niit/bin/new_everyday.log')">立刻开始全新的可视化！</button>
+              <button  @click="sshcommand('/home/niit/bin/everyday_update.sh today > /home/niit/bin/new_everyday_update.log')">立刻开始全新的可视化！</button>
             </div>
         </section>
         <div class="image-slider">
@@ -127,7 +127,7 @@
         <h1>模型训练</h1>
       </header>
       <div class="button">
-        <button style="font-size: 20px;" @click="downloadMFile()">开始训练</button>
+        <button style="font-size: 20px;" @click="sshcommand('/home/niit/bin/model_training.sh > /home/niit/bin/model_training.log')">开始训练</button>
       </div>
       <div class="table-container" :key="componentKey1"><table style="width: 100%;">
           <thead>
@@ -393,7 +393,7 @@ function handleUserFileUpload(event) {
   selectedUserFile.value = file;
 }
 
-// Wrap a new post method to add loading indicator and error handling
+// 包装函数
 function enhancedPost(url, formData, onSuccess) {
   const loadingInstance = ElLoading.service({
     lock: true,
@@ -412,6 +412,7 @@ function enhancedPost(url, formData, onSuccess) {
   }
 }
 
+// 执行命令
 function sshcommand(command) {
 
   const formData = new FormData();
@@ -425,13 +426,14 @@ function sshcommand(command) {
   });
 }
 
+
 // Upload file logic
 function uploadFile() {
   
   const formData = new FormData();
   formData.append('file', selectedFile.value);  // selectedFile.value is the file you got from <input type="file">
 
-  post('/api/files/upload', formData
+  post('/files/upload', formData
   , () => {
                 ElMessage.success('Upload successful')
             });
@@ -523,35 +525,35 @@ function go() {
   componentKey.value++;
 }
 
-// Fetches a file via GET request, processes its data for preview, and updates the UI with parsed results.
-function downloadMFile() {
-  const loadingInstance = ElLoading.service({
-          lock: true,
-          text: 'Processing, please wait...',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
-  get(`/api/ssh/train/fuck`, 
-    (data) => {
-        const lines = data.split('\n');
-        mpreviewData1 = lines.slice(0, Math.min(10, lines.length));
-        console.log(mpreviewData1)
-        mheaders = mpreviewData1[0].split(',').map(header => header.trim());
-        mprocessedData = mpreviewData1.slice(1, 2).map(line =>
-          line.split(',').map(value => value.trim())
-        );
-        componentKey1.value++;
-        componentKey2.value++;
-        componentKey3.value++;
-        loadingInstance.close();
-    }, 
-    undefined,  // No intermediate processing function defined here
-    (message) => {
-        ElMessage.warning(`File download failed: ${message}`);
-        coldTime.value = 0;  // This coldTime handling may not apply to the download logic, it should be adjusted or removed
-        loadingInstance.close();
-    });
-
-}
+// // Fetches a file via GET request, processes its data for preview, and updates the UI with parsed results.
+// function downloadMFile() {
+//   const loadingInstance = ElLoading.service({
+//           lock: true,
+//           text: 'Processing, please wait...',
+//           background: 'rgba(0, 0, 0, 0.7)'
+//         });
+//   get(`/api/ssh/train/fuck`,
+//     (data) => {
+//         const lines = data.split('\n');
+//         mpreviewData1 = lines.slice(0, Math.min(10, lines.length));
+//         console.log(mpreviewData1)
+//         mheaders = mpreviewData1[0].split(',').map(header => header.trim());
+//         mprocessedData = mpreviewData1.slice(1, 2).map(line =>
+//           line.split(',').map(value => value.trim())
+//         );
+//         componentKey1.value++;
+//         componentKey2.value++;
+//         componentKey3.value++;
+//         loadingInstance.close();
+//     },
+//     undefined,  // No intermediate processing function defined here
+//     (message) => {
+//         ElMessage.warning(`File download failed: ${message}`);
+//         coldTime.value = 0;  // This coldTime handling may not apply to the download logic, it should be adjusted or removed
+//         loadingInstance.close();
+//     });
+//
+// }
 
 function handleNavigation(Id) {
   scrollTo(Id);
@@ -614,7 +616,7 @@ const fetchData = async () => {
 
 // 每隔5秒从后端获取新数据
 onMounted(() => {
-  setInterval(fetchData, 3000);
+  setInterval(fetchData, 5000);
 });
 // endregion
 
