@@ -102,7 +102,6 @@ public class SSHController {
             sshService.uploadToRemote(file, userId); // 上传到远程虚拟机
             return ResponseEntity.ok("执行成功");
         } catch (Exception e) {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
