@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Validated
 @RestController
@@ -24,7 +25,6 @@ public class MysqlController {
      * @param tableName 表名
      * @return 表中数据
      */
-    //@PostMapping("/data/{tableName}")
     @PostMapping("/data/{tableName}")
     public RestBean<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
         System.out.println("Requested Table: " + tableName);
@@ -36,6 +36,8 @@ public class MysqlController {
             }
         });
     }
+
+
 
     /**
      * 统一消息处理

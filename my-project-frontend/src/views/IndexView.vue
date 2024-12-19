@@ -54,9 +54,14 @@
           </div>
         </div>
       </div>
+<!--      <div class="marquee" style="margin-top: 60px;">-->
+<!--        <div class="marquee-content">-->
+<!--          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="marquee" style="margin-top: 60px;">
         <div class="marquee-content">
-          <span v-for="n in 50" :key="n" class="marquee-item">待修改</span>
+          <span v-for="(item, index) in marqueeItems" :key="index" class="marquee-item">{{ item }}</span>
         </div>
       </div>
     </div>
@@ -226,6 +231,22 @@ const images = ref([
   { src: 'src/views/img/轮播_古典银行.jpg', alt: '轮播_古典银行' }
 ]);
 
+const marqueeItems = ref([
+  '唯一标识',
+  '客户唯一标识',
+  '客户姓氏',
+  '信用评分',
+  '地理位置',
+  '性别',
+  '年龄',
+  '客户关系年限',
+  '账户余额',
+  '使用的银行产品数',
+  '是否拥有信用卡',
+  '是否为活跃客户',
+  '估计薪资',
+  '是否流失'
+]);
 
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
@@ -262,6 +283,10 @@ function userLogout() {
 }
 // endregion
 
+function handleNavigation(Id) {
+  scrollTo(Id);
+}
+
 function scrollTo(elementId) {
   activeSection.value = elementId;  // Update active section
   const element = document.getElementById(elementId);
@@ -290,43 +315,43 @@ function updateNavbarColor(section) {
   }
 }
 
-function handleScroll() {
-  const scrollY = window.scrollY + window.innerHeight / 2;  // Consider the midpoint position
-  const sections = {
-    home: document.getElementById('home').offsetTop,
-    // RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
-    DataAnalysis: document.getElementById('DataAnalysis').offsetTop,
-    ModelTraining: document.getElementById('ModelTraining').offsetTop,
-    NewDataPrediction: document.getElementById('NewDataPrediction').offsetTop
-  };
-
-  for (const section of Object.keys(sections).reverse()) {
-    if (scrollY >= sections[section]) {
-      if (activeSection.value !== section) {
-        activeSection.value = section;  // Update active section
-        updateNavbarColor(section);  // Update navbar color
-      }
-      break;
-    }
-  }
-}
-
-function startTouch(e) {
-  startX.value = e.touches[0].clientX;
-}
-
-function moveTouch(e) {
-  const diffX = e.touches[0].clientX - startX.value;
-  
-  if (Math.abs(diffX) > threshold) {
-    if (diffX > 0) {
-      prev();
-    } else {
-      next();
-    }
-    startX.value = e.touches[0].clientX; // Reset start point
-  }
-}
+// function handleScroll() {
+//   const scrollY = window.scrollY + window.innerHeight / 2;  // Consider the midpoint position
+//   const sections = {
+//     home: document.getElementById('home').offsetTop,
+//     // RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
+//     DataAnalysis: document.getElementById('DataAnalysis').offsetTop,
+//     ModelTraining: document.getElementById('ModelTraining').offsetTop,
+//     NewDataPrediction: document.getElementById('NewDataPrediction').offsetTop
+//   };
+//
+//   for (const section of Object.keys(sections).reverse()) {
+//     if (scrollY >= sections[section]) {
+//       if (activeSection.value !== section) {
+//         activeSection.value = section;  // Update active section
+//         updateNavbarColor(section);  // Update navbar color
+//       }
+//       break;
+//     }
+//   }
+// }
+//
+// function startTouch(e) {
+//   startX.value = e.touches[0].clientX;
+// }
+//
+// function moveTouch(e) {
+//   const diffX = e.touches[0].clientX - startX.value;
+//
+//   if (Math.abs(diffX) > threshold) {
+//     if (diffX > 0) {
+//       prev();
+//     } else {
+//       next();
+//     }
+//     startX.value = e.touches[0].clientX; // Reset start point
+//   }
+// }
 
 function next() {
   currentIndex.value = (currentIndex.value + 1) % images.value.length;
@@ -561,9 +586,7 @@ function go() {
 //
 // }
 
-function handleNavigation(Id) {
-  scrollTo(Id);
-}
+
 
 
 
@@ -671,6 +694,7 @@ async function fetchDataAndRenderChart(tableName) {
     console.error('Fetch Error:', error);
   }
 }
+
 // 渲染ads_customer_balance_distribution
 function renderBalanceDistribution(data) {
   // 获取图表 DOM 容器
@@ -691,35 +715,50 @@ function renderBalanceDistribution(data) {
   // 配置 ECharts 图表
   const option = {
     title: {
-      text: '客户余额分布',
-      left: 'center'
+      text: '用户余额分布',
+      subtext: '根据用户余额分布进行分析',
+      left: 'center',
+      textStyle: {
+        fontSize: 18,
+      },
     },
     tooltip: {
-      trigger: 'item',
-      formatter: '{b}: {c} ({d}%)'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',  // 使用阴影指示器
+      },
     },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'category',
+      data: balanceRanges,  // 余额区间
+      axisLabel: {
+        interval: 0,  // 确保所有标签显示
+        rotate: 30,   // 标签倾斜，防止重叠
+      },
+    },
+    yAxis: {
+      type: 'value',
+      name: '用户数量',
+      axisLabel: {
+        formatter: '{value}',
+      },
     },
     series: [
       {
-        name: '客户数量',
-        type: 'pie',
-        radius: '50%',
-        data: balanceRanges.map((range, index) => ({
-          value: customerCounts[index],
-          name: range
-        })),
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }
-    ]
+        name: '用户数量',
+        type: 'bar',  // 使用柱状图
+        data: customerCounts,  // 用户数量
+        itemStyle: {
+          color: '#b286a4',  // 柱子颜色
+        },
+      },
+    ],
   };
 
   chartInstances.balanceChart.setOption(option);
@@ -750,90 +789,64 @@ function renderChurnRate(data) {
   // 配置 ECharts 图表的共用选项
   const option = {
     title: {
-      text: '客户流失率分析',
-      subtext: '按地区、年龄组和性别',
-      left: 'center',
-      top: '10',
-      textStyle: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: '#2c3e50',
-      }
+      text: '客户分析',
+      subtext: '流失率与客户数分析',
+      left: 'center'
     },
     tooltip: {
-      trigger: 'item',
-      formatter: (params) => {
-        return `${params.name}<br>流失率: ${params.value}%<br>流失客户: ${exitedCustomers[params.dataIndex]}<br>总客户: ${totalCustomers[params.dataIndex]}`;
-      }
+      trigger: 'axis'
     },
     legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: regions.concat(ageGroups, genders),
-      top: 'middle',
-      textStyle: {
-        color: '#34495e',
-      }
-    },
-    grid: {
-      left: '10%',
-      right: '10%',
-      bottom: '15%',
-      top: '20%',
+      data: ['流失率', '总客户数', '流失客户数'],
+      left: '0'
     },
     xAxis: {
       type: 'category',
-      data: regions,  // 或者根据需要使用 `ageGroups` 或 `genders`
-      axisLabel: {
-        interval: 0,
-        rotate: 30,
-        fontSize: 12,
-      },
-      axisLine: {
-        lineStyle: {
-          color: '#2c3e50',
-        }
-      }
+      data: regions, // 使用地理位置作为 X 轴
+      name: '地理位置'
     },
-    yAxis: {
-      type: 'value',
-      name: '流失率 (%)',
-      axisLine: {
-        lineStyle: {
-          color: '#2c3e50',
-        }
+    yAxis: [
+      {
+        type: 'value',
+        name: '客户数',
       },
-      axisLabel: {
-        formatter: '{value} %',
-      },
-      splitLine: {
-        lineStyle: {
-          type: 'dashed',
-          color: '#BDC3C7',
-        }
+      {
+        type: 'value',
+        name: '流失率',
+        min: 0,
+        max: 100
       }
-    },
+    ],
     series: [
       {
-        name: '客户流失率',
+        name: '总客户数',
         type: 'bar',
-        data: churnRates,
+        data: totalCustomers,
+        yAxisIndex: 0,
         itemStyle: {
-          color: function(params) {
-            // 通过不同的区域/年龄组/性别给不同的条形图设置颜色
-            const colorPalette = ['#2980b9', '#e74c3c', '#27ae60', '#f39c12'];
-            return colorPalette[params.dataIndex % colorPalette.length];
-          },
-        },
-        label: {
-          show: true,
-          position: 'top',
-          formatter: '{c}%',
-          color: '#fff',
-          fontSize: 12,
-        },
+          color: '#af799e'
+        }
       },
-    ],
+      {
+        name: '流失客户数',
+        type: 'bar',
+        data: exitedCustomers,
+        yAxisIndex: 0,
+        itemStyle: {
+          color: '#e58799'
+        }
+      },
+      {
+        name: '流失率',
+        type: 'line',
+        data: churnRates,
+        yAxisIndex: 1,
+        itemStyle: {
+          color: '#ffa185'
+        },
+        smooth: true
+      }
+    ]
   };
 
   // 将 ECharts 配置应用到图表实例中
@@ -917,7 +930,7 @@ function renderFeatureDistribution(data) {
         itemStyle: {
           normal: {
             color: function(params) {
-              const colorList = ['#F44336', '#2196F3', '#4CAF50', '#FFC107'];
+              const colorList = ['#af799e', '#e58799', '#ffa185', '#ffc96f'];
               return colorList[params.dataIndex % colorList.length];
             }
           }
@@ -943,7 +956,7 @@ function renderFeatureDistribution(data) {
         itemStyle: {
           normal: {
             color: function(params) {
-              const colorList = ['#FF5722', '#9C27B0', '#03A9F4', '#8BC34A'];
+              const colorList = ['#786c8d', '#e58799', '#ffc96f', '#f9f871'];
               return colorList[params.dataIndex % colorList.length];
             }
           }
@@ -980,160 +993,93 @@ function renderValueSegmentation(data) {
   // 配置 ECharts 图表
   const option = {
     title: {
-      text: '客户价值分层分析',
-      subtext: '按客户价值段进行细分',
-      left: 'center',
-      textStyle: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        color: '#333'
-      },
-      subtextStyle: {
-        fontSize: 14,
-        color: '#777'
-      }
+      text: '客户分群',
+      subtext: '基于客户分段',
+      left: 'center'
     },
     tooltip: {
-      trigger: 'item',
-      formatter: '{b}: {c} ({d}%)',
-      backgroundColor: 'rgba(50, 50, 50, 0.7)',
-      borderColor: '#ccc',
-      borderWidth: 1,
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    grid: {
-      left: '10%',
-      right: '10%',
-      bottom: '10%',
-      top: '15%',
-      containLabel: true
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' }
     },
     legend: {
-      orient: 'vertical',
-      left: 'left',
-      top: 'center',
-      data: valueSegments,
-      textStyle: {
-        color: '#444',
-        fontSize: 14
-      }
+      data: ['客户数量', '平均余额', '平均信用分', '活跃率', '流失率'],
+      left: 'left'
     },
-    series: [
-      // 饼图 - 客户数量分布
-      {
-        name: '客户数量分布',
-        type: 'pie',
-        radius: '40%',
-        center: ['25%', '50%'],
-        data: valueSegments.map((segment, index) => ({
-          value: customerCounts[index],
-          name: segment
-        })),
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            color: '#ff7f50' // 高亮效果
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: function(params) {
-              const colorList = ['#FF5722', '#9C27B0', '#03A9F4', '#4CAF50', '#FFC107'];
-              return colorList[params.dataIndex % colorList.length];
-            }
-          }
-        }
-      },
-      // 柱状图 - 平均余额 & 平均信用分数
-      {
-        name: '平均余额 & 平均信用分数',
-        type: 'bar',
-        xAxisIndex: 0,
-        yAxisIndex: 0,
-        data: avgBalances,
-        barWidth: 20,
-        itemStyle: {
-          color: '#2196F3'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        }
-      },
-      {
-        name: '平均信用分数',
-        type: 'bar',
-        xAxisIndex: 0,
-        yAxisIndex: 0,
-        data: avgCreditScores,
-        barWidth: 20,
-        itemStyle: {
-          color: '#8BC34A'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        }
-      },
-      // 折线图 - 活跃客户率 & 流失率
-      {
-        name: '活跃客户率',
-        type: 'line',
-        data: activeRates,
-        smooth: true,
-        lineStyle: {
-          color: '#FF9800'
-        },
-        symbolSize: 8,
-        itemStyle: {
-          color: '#FF9800'
-        }
-      },
-      {
-        name: '流失率',
-        type: 'line',
-        data: churnRates,
-        smooth: true,
-        lineStyle: {
-          color: '#F44336'
-        },
-        symbolSize: 8,
-        itemStyle: {
-          color: '#F44336'
-        }
-      }
-    ],
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
     xAxis: [
       {
         type: 'category',
-        data: valueSegments,
-        axisLabel: {
-          rotate: 45,
-          textStyle: {
-            color: '#333',
-            fontSize: 14
-          }
+        data: valueSegments, // 使用 ValueSegment 作为 X 轴数据
+        axisTick: {
+          alignWithLabel: true
         }
       }
     ],
     yAxis: [
       {
         type: 'value',
-        name: '金额/分数',
-        axisLabel: {
-          formatter: '{value}'
-        },
-        splitLine: {
-          show: true
-        }
+        name: '客户数量',
+        position: 'left'
+      },
+      {
+        type: 'value',
+        name: '平均余额',
+        position: 'right',
+        offset: 50
+      },
+      {
+        type: 'value',
+        name: '平均信用分',
+        position: 'right',
+        offset: 100
+      },
+      {
+        type: 'value',
+        name: '活跃率 / 流失率',
+        position: 'right',
+        offset: 150
+      }
+    ],
+    series: [
+      {
+        name: '客户数量',
+        type: 'bar',
+        data: customerCounts,
+        yAxisIndex: 0,
+        color: '#b286a4'
+      },
+      {
+        name: '平均余额',
+        type: 'bar',
+        data: avgBalances,
+        yAxisIndex: 1,
+        color: '#e792a2'
+      },
+      {
+        name: '平均信用分',
+        type: 'bar',
+        data: avgCreditScores,
+        yAxisIndex: 2,
+        color: '#ffa78d'
+      },
+      {
+        name: '活跃率',
+        type: 'line',
+        data: activeRates,
+        yAxisIndex: 3,
+        color: '#ffcb74'
+      },
+      {
+        name: '流失率',
+        type: 'line',
+        data: churnRates,
+        yAxisIndex: 3,
+        color: '#f9f871'
       }
     ]
   };
@@ -1468,7 +1414,7 @@ ul {
 /* region 修改日志实时展示 */
 .message-container {
   max-width: 1500px;
-  margin: 150px 0 auto;
+  margin: 0 auto;
   padding: 20px;
   background-color: #2e2a2a;
   border-radius: 8px;
