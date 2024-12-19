@@ -1,0 +1,1 @@
+{"cacheNodeIds": false, "checkpointInterval": 10, "featureSubsetStrategy": "all", "featuresCol": "scaled_features", "labelCol": "label", "lossType": "logistic", "maxBins": 32, "maxDepth": 5, "maxIter": 100, "maxMemoryInMB": 256, "minInfoGain": 0.0, "minInstancesPerNode": 1, "predictionCol": "prediction", "seed": 3504127614838123891, "stepSize": 0.1, "subsamplingRate": 1.0}
