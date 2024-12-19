@@ -315,44 +315,6 @@ function updateNavbarColor(section) {
   }
 }
 
-// function handleScroll() {
-//   const scrollY = window.scrollY + window.innerHeight / 2;  // Consider the midpoint position
-//   const sections = {
-//     home: document.getElementById('home').offsetTop,
-//     // RealTimeDisplay: document.getElementById('RealTimeDisplay').offsetTop,
-//     DataAnalysis: document.getElementById('DataAnalysis').offsetTop,
-//     ModelTraining: document.getElementById('ModelTraining').offsetTop,
-//     NewDataPrediction: document.getElementById('NewDataPrediction').offsetTop
-//   };
-//
-//   for (const section of Object.keys(sections).reverse()) {
-//     if (scrollY >= sections[section]) {
-//       if (activeSection.value !== section) {
-//         activeSection.value = section;  // Update active section
-//         updateNavbarColor(section);  // Update navbar color
-//       }
-//       break;
-//     }
-//   }
-// }
-//
-// function startTouch(e) {
-//   startX.value = e.touches[0].clientX;
-// }
-//
-// function moveTouch(e) {
-//   const diffX = e.touches[0].clientX - startX.value;
-//
-//   if (Math.abs(diffX) > threshold) {
-//     if (diffX > 0) {
-//       prev();
-//     } else {
-//       next();
-//     }
-//     startX.value = e.touches[0].clientX; // Reset start point
-//   }
-// }
-
 function next() {
   currentIndex.value = (currentIndex.value + 1) % images.value.length;
 }
@@ -458,7 +420,7 @@ function sshcommand(command) {
 }
 
 
-// Upload file logic
+// 上传
 function uploadFile() {
   
   const formData = new FormData();
