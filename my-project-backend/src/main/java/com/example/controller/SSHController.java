@@ -68,33 +68,6 @@ public class SSHController {
         );
     }
 
-
-//    @GetMapping("/status/{filename:.+}")
-//    public ResponseEntity<RestBean<String>> executeSSHStatus(@PathVariable String filename) {
-//        return ResponseEntity.ok(
-//                messageHandle(() -> sshService.statuscll(filename))  // 返回文件内容
-//        );
-//    }
-
-//    @GetMapping("/training")
-//    public ResponseEntity<RestBean<String>> executeTrainingImageDownload() {
-//        return ResponseEntity.ok(
-//                messageHandle(() -> {
-//                    List<String> fileNames = List.of("merged_evaluation.csv", "roc_curve.png", "feature_importances.png");
-//                    String remoteDirectory = "/home/niit/";
-//                    String localDirectory = "D:/Programming/Front-End-Modified/my-project-frontend/src/views/img";
-//                    try {
-//                        sshService.downloadFiles(fileNames, remoteDirectory, localDirectory);
-//                    } catch (JSchException e) {
-//                        throw new RuntimeException(e);
-//                    } catch (SftpException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    return fileService.loadFileContent("merged_evaluation.csv");
-//                })
-//        );
-//    }
-
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {

@@ -222,8 +222,6 @@ const navbarBg = ref('#1a1a1a');  // Set initial color based on the initial acti
 
 /* 轮播图片 */
 const currentIndex = ref(0);
-const startX = ref(0);
-const threshold = 50;
 const images = ref([
   { src: 'src/views/img/轮播_商业大佬.png', alt: '轮播_商业大佬' },
   { src: 'src/views/img/轮播_银行牌匾.jpg', alt: '轮播_银行牌匾' },
@@ -250,7 +248,6 @@ const marqueeItems = ref([
 
 const selectedFile = ref(null);
 const selectedUserFile = ref(null);
-const previewData = ref([]);
 let headers = ref(null);
 let good = ref(null);
 let previewData1 = ref([]);
@@ -262,7 +259,6 @@ let mprocessedData = ref([]);
 const componentKey = ref(0);
 const componentKey1 = ref(0);
 const componentKey2 = ref(0);
-const componentKey3 = ref(0);
 
 // region 用户面板
 const showProfilePanel = ref(false);
@@ -335,30 +331,18 @@ function setActiveView(view) {
   activeView.value = view;
 }
 
-// Trigger file selection
-function triggerFileInput() {
-  document.getElementById('xfile').click();
-}
-
 function triggerXFileInput() {
   document.getElementById('file').click();
 }
 
-// Handle during drag
 function onDragOver(event) {
   event.preventDefault();
 }
 
-// File drop handling
 function onFileDrop(event) {
   handleFileUpload(event);
 }
 
-function onUserFileDrop(event) {
-  handleUserFileUpload(event);
-}
-
-// Handle file upload selection
 function handleFileUpload(event) {
   const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
   const file = files[0];
@@ -368,16 +352,6 @@ function handleFileUpload(event) {
     return;
   }
   selectedFile.value = file;
-}
-
-function handleUserFileUpload(event) {
-  const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
-  const file = files[0];
-  if (!file.name.endsWith('.csv')) {
-    ElMessage.error('只能上传CSV格式文件! ');
-    return;
-  }
-  selectedUserFile.value = file;
 }
 
 // 包装函数
@@ -433,22 +407,6 @@ function uploadFile() {
 
 }
 
-function uploadUserFile() {
-  const loadingInstance11 = ElLoading.service({
-    lock: true,
-    text: '处理中, 请等待...',
-    background: 'rgba(0, 0, 0, 0.7)'
-  });
-  const formData = new FormData();
-  formData.append('file', selectedUserFile.value);  // selectedFile.value is the file you got from <input type="file">
-
-  post('/api/ssh/upload', formData
-  , () => {
-    sessionStorage.setItem('uploadSuccess', 'true');
-            });
-}
-
-// Download file and preview
 function downloadFile() {
   filename = selectedFile.value.name
   const loadingInstance = ElLoading.service({
@@ -505,7 +463,6 @@ function downloadFile() {
 
 }
 
-// Generates a file from the given data and triggers its download as "predictions.csv".
 function go() {
   console.log(good)
   const url = window.URL.createObjectURL(new Blob([good]));
@@ -517,41 +474,6 @@ function go() {
   ElMessage.success('成功下载');
   componentKey.value++;
 }
-
-// // Fetches a file via GET request, processes its data for preview, and updates the UI with parsed results.
-// function downloadMFile() {
-//   const loadingInstance = ElLoading.service({
-//           lock: true,
-//           text: 'Processing, please wait...',
-//           background: 'rgba(0, 0, 0, 0.7)'
-//         });
-//   get(`/api/ssh/train/fuck`,
-//     (data) => {
-//         const lines = data.split('\n');
-//         mpreviewData1 = lines.slice(0, Math.min(10, lines.length));
-//         console.log(mpreviewData1)
-//         mheaders = mpreviewData1[0].split(',').map(header => header.trim());
-//         mprocessedData = mpreviewData1.slice(1, 2).map(line =>
-//           line.split(',').map(value => value.trim())
-//         );
-//         componentKey1.value++;
-//         componentKey2.value++;
-//         componentKey3.value++;
-//         loadingInstance.close();
-//     },
-//     undefined,  // No intermediate processing function defined here
-//     (message) => {
-//         ElMessage.warning(`File download failed: ${message}`);
-//         coldTime.value = 0;  // This coldTime handling may not apply to the download logic, it should be adjusted or removed
-//         loadingInstance.close();
-//     });
-//
-// }
-
-
-
-
-
 
 // region 修改日志实时展示
 // 数据
@@ -1755,51 +1677,6 @@ p-button:hover
   border-top: 1px solid #c0c0c0; /* Add a top border to differentiate the content */
 }
 th {text-align: center;}
-/* endregion */
-
-/* region 不知道干什么用 */
-/*
-#ning button {
-    margin: 100px;
-    padding: 12px 24px;
-    background-color: #333;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 30px;
-}
-*/
-
-/*
-#ning button:hover {
-    background-color: #555;
-}
-*/
-
-/*
-.dashboard-image {
-    width: 100%;
-    margin-top: 1rem;
-}
-*/
-
-/*
-@media (max-width: 768px) {
-    .content-section {
-        padding: 10px;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    header p, .actions button {
-        font-size: 1rem;
-    }
-}
-*/
-
 /* endregion */
 </style>
 

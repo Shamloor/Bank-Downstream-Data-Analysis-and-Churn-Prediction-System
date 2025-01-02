@@ -1,2 +1,9 @@
 .idea/
-log/
+my-project-backend/.idea
+my-project-backend/.gitignore
+my-project-backend/log
+my-project-backend/target
+
+my-project-frontend/.vscode
+my-project-frontend/node_modules
+my-project-frontend/.gitignore
