@@ -16,21 +16,24 @@ from sklearn.metrics import roc_curve, auc
 import joblib
 import json
 
-# create a spark session
+# 创建 Spark 会话
 spark = SparkSession.builder.master("local[*]").getOrCreate()
 
-# Read train.csv dataset from hdfs
+#正式运行时以集群模式运行
+#spark = SparkSession.builder.master("spark://niit01:7077").getOrCreate()
+
+# 从 HDFS 读取 train.csv 数据集
 spark_df = spark.read.csv("hdfs:///warehouse/bank_db/dwd/train.csv", inferSchema=True, header=True)
 
 spark_df.printSchema()
 
-# change feature names to lower case
+# 将特征名称转换为小写
 spark_df = spark_df.toDF(*[c.lower() for c in spark_df.columns])
 
-# drop irrelevent features
+# 删除不相关的特征
 spark_df = spark_df.drop('id', "customerid", "surname")
 
-# Feature engineering
+# 特征工程
 spark_df = spark_df.withColumn('creditscore_salary', spark_df.creditscore / spark_df.estimatedsalary)
 spark_df = spark_df.withColumn('creditscore_tenure', spark_df.creditscore * spark_df.tenure)
 spark_df = spark_df.withColumn('balance_salary', spark_df.balance / spark_df.estimatedsalary)
@@ -69,12 +72,12 @@ temp_sdf = indexer.fit(spark_df).transform(spark_df)
 spark_df = temp_sdf.withColumn("geography_label", temp_sdf["geography_label"].cast("integer"))
 spark_df = spark_df.drop('geography')
 
-# One-Hot Encoding
+# 独热编码
 encoders = [OneHotEncoder(inputCol=col, outputCol=col + "_ohe") for col in ["age_cat", "geography_label"]]
 for encoder in encoders:
     spark_df = encoder.transform(spark_df)
 
-# Generate feature names after One Hot Encoding
+# 独热编码后生成特征名称
 age_cat_ohe_count = len(spark_df.select("age_cat_ohe").first()["age_cat_ohe"])
 geography_label_ohe_count = len(spark_df.select("geography_label_ohe").first()["geography_label_ohe"])
 
@@ -87,55 +90,55 @@ temp_sdf = stringIndexer.fit(spark_df).transform(spark_df)
 
 spark_df = temp_sdf.withColumn("label", temp_sdf["label"].cast("integer"))
 
-# User defined function to convert Vector into array
+# 用户自定义函数将向量转换为数组
 def vector_to_array(vector):
     return vector.toArray().tolist()
 
 vector_to_array_udf = udf(vector_to_array, ArrayType(DoubleType()))
 
-# Converting Vector types to arrays
+# 将向量类型转换为数组
 spark_df = spark_df.withColumn("age_cat_ohe_array", vector_to_array_udf(col("age_cat_ohe")))
 spark_df = spark_df.withColumn("geography_label_ohe_array", vector_to_array_udf(col("geography_label_ohe")))
 
-# Expanding the array into multiple individual columns
+# 将数组展开为多个独立的列
 for i in range(age_cat_ohe_count):
     spark_df = spark_df.withColumn(f"age_cat_ohe_{i}", col("age_cat_ohe_array")[i])
     
 for i in range(geography_label_ohe_count):
     spark_df = spark_df.withColumn(f"geography_label_ohe_{i}", col("geography_label_ohe_array")[i])
 
-# drop orininal vector columns
+# 删除原始向量列
 spark_df = spark_df.drop("age_cat_ohe", "geography_label_ohe", "age_cat_ohe_array", "geography_label_ohe_array")
 
-# get feature columns after OHE
+# 获取独热编码后的特征列
 all_feature_names = [
     'creditscore', 'age', 'tenure', 'balance', 'numofproducts', 'hascrcard',
     'isactivemember', 'estimatedsalary', 'creditscore_salary', 'creditscore_tenure',
     'balance_salary', 'segment_label', 'gender_label'
 ] + [f"age_cat_ohe_{i}" for i in range(age_cat_ohe_count)] + [f"geography_label_ohe_{i}" for i in range(geography_label_ohe_count)]
 
-# transform dataframe into vector
+# 将数据框转换为向量
 va = VectorAssembler(inputCols=all_feature_names, outputCol="features")
 va_df = va.transform(spark_df)
 
 final_df = va_df.select("features", "label")
 
-# standard scale features vector 
+# 标准化特征向量
 scaler = StandardScaler(inputCol="features", outputCol="scaled_features")
 final_df = scaler.fit(final_df).transform(final_df)
 
-# split dataset into train_df and test_df
+# 将数据集分割为训练集和测试集
 train_df, test_df = final_df.randomSplit([0.8, 0.2], seed=17)
 
 # print("Training Dataset Count: " + str(train_df.count()))
 # print("Test Dataset Count: " + str(test_df.count()))
 
-# train a GBTClassifier using train_df and test using test_df
+# 使用 train_df 训练 GBTClassifier 并在 test_df 上测试
 gbm = GBTClassifier(maxIter=100, featuresCol="scaled_features", labelCol="label")
 gbm_model = gbm.fit(train_df)
 y_pred = gbm_model.transform(test_df)
 
-# save model to hdfs
+# 保存模型到 HDFS
 # 提取模型参数
 model_params = gbm_model.extractParamMap()
 params_json = {param.name: value for param, value in model_params.items()}
@@ -145,7 +148,7 @@ with open("gbdt_model_params.json", "w") as f:
     json.dump(params_json, f)
 print("模型参数已保存到 gbdt_model_params.json")
 
-# Model evaluation
+# 模型评估
 evaluator = BinaryClassificationEvaluator(labelCol="label", rawPredictionCol="prediction", metricName='areaUnderROC')
 evaluatorMulti = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction")
 
@@ -156,18 +159,18 @@ f1 = evaluatorMulti.evaluate(y_pred, {evaluatorMulti.metricName: "f1"})
 
 # print("accuracy: %f, precision: %f, recall: %f, f1: %f" % (acc, precision, recall, f1))
 
-# create dataframe of evaluation results
+# 创建评估结果的数据框
 results = spark.createDataFrame([
     Row(accuracy=acc, precision=precision, recall=recall, f1=f1)
 ])
 
-# evaluation results saved to CSV file on Linux
+# 将评估结果保存到 Linux 上的 CSV 文件
 eva_path = "hdfs:///model/evaluation_results.csv"
 results.write.csv(eva_path, header=True, mode="overwrite")
 
 # print(f"Evaluation results saved to HDFS at {eva_path}")
 
-# ROC cureve and AUC
+# ROC 曲线和 AUC
 evaluator = BinaryClassificationEvaluator(labelCol="label")
 roc_auc = evaluator.evaluate(y_pred, {evaluator.metricName: "areaUnderROC"})
 
@@ -181,36 +184,36 @@ fpr, tpr, _ = roc_curve(y_true, y_scores)
 roc_auc = auc(fpr, tpr)
 
 plt.figure()
-plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC 曲线 (面积 = {roc_auc:.2f})')
 plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic')
+plt.xlabel('假正率')
+plt.ylabel('真正率')
+plt.title('接收者操作特征曲线')
 plt.legend(loc="lower right")
 plt.savefig("roc_curve.png", transparent=True, dpi=300)
 
 
-# feature importances
+# 特征重要性
 importances = gbm_model.featureImportances.toArray()
 
-# get top 10 feature importances
+# 获取前 10 个特征的重要性
 indices = np.argsort(importances)[-10:][::-1]
 top_importances = importances[indices]
 top_feature_names = np.array(all_feature_names)[indices]
 
 plt.figure(figsize=(10, 6))
-plt.title("Feature Importances (TOP 10)", fontsize=16)
+plt.title("特征重要性 (前 10 名)", fontsize=16)
 plt.bar(range(len(top_importances)), top_importances, align="center")
 plt.xticks(range(len(top_feature_names)), top_feature_names, rotation=60, fontsize=12)
 plt.tight_layout()
 plt.savefig("feature_importances.png", dpi=300, transparent=True)
 
-# upload figure to hdfs
+# 上传图表到 HDFS
 # local_path = "feature_importances.png"
 # hdfs_path = "hdfs:///model/plots/feature_importances.png"
 # subprocess.run(["hdfs", "dfs", "-put", local_path, hdfs_path], check=True)
 
-# stop SparkSession
+# 停止 Spark 会话
 spark.stop()

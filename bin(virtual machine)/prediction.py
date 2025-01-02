@@ -8,6 +8,9 @@ from pyspark.sql.functions import udf, col
 # 初始化 Spark Session
 spark = SparkSession.builder.master("local[*]").appName("TrainAndPredictGBT").getOrCreate()
 
+#正式运行时以集群模式运行
+#spark = SparkSession.builder.master("spark://niit01:7077").appName("TrainAndPredictGBT").getOrCreate()
+
 # ----------------- 1. 读取 GBT 模型参数 -----------------
 with open("gbdt_model_params.json", "r") as f:
     params = json.load(f)
